@@ -1,0 +1,11 @@
+{
+  "id": "cinematic-opener-pro",
+  "name": "Apertura Cinématica Minimalista",
+  "description": "Títulos elegantes con efectos de aparición suave y kerning dinámico (Opener). 100% Vanilla JS.",
+  "version": "4.0.0",
+  "presets": ["branding", "motion", "layout"],
+  "schema": [
+    { "id": "title", "type": "string", "label": "Título Principal", "defaultValue": "DISEÑO MODULAR" },
+    { "id": "subtitle", "type": "string", "label": "Subtítulo / Serie", "defaultValue": "DV-ENGINE SERIES" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "live-info-widget",
+  "name": "Widget de Reloj y Clima",
+  "description": "Información de tiempo y clima en vivo para esquinas de pantalla (Live Info).",
+  "version": "3.4.0",
+  "presets": ["branding", "motion", "layout"],
+  "schema": [
+    { "id": "location", "type": "string", "label": "Ubicación", "defaultValue": "MADRID, ES" },
+    { "id": "temp", "type": "string", "label": "Temperatura", "defaultValue": "22°C" }
+  ]
+}

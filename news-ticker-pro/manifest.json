@@ -1,0 +1,21 @@
+{
+  "id": "news-ticker-pro",
+  "name": "Cinta de Noticias Dinámica",
+  "description": "Cinta de noticias de desplazamiento horizontal suave para directos (Crawl).",
+  "version": "3.4.0",
+  "presets": ["branding", "motion", "layout"],
+  "schema": [
+    {
+      "id": "tickerText",
+      "type": "string",
+      "label": "Texto de la Cinta",
+      "defaultValue": "NOTICIA DE ÚLTIMA HORA: El Dynamic Vector Graphics Engine v3.4.0 ya está disponible con soporte modular..."
+    },
+    {
+      "id": "scrollSpeed",
+      "type": "number",
+      "label": "Velocidad de Desplazamiento",
+      "defaultValue": 4
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "social-cards-pro",
+  "name": "Tarjetas de Redes Sociales Pro",
+  "description": "Animación de entrada con rebote para perfiles de redes sociales (Pop-up).",
+  "version": "3.4.0",
+  "presets": ["branding", "motion", "layout"],
+  "externalScripts": ["https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"],
+  "schema": [
+    {
+      "id": "platform",
+      "type": "select",
+      "label": "Plataforma",
+      "defaultValue": "instagram",
+      "options": [
+        { "label": "Instagram", "value": "instagram" },
+        { "label": "X (Twitter)", "value": "twitter" },
+        { "label": "YouTube", "value": "youtube" },
+        { "label": "Twitch", "value": "twitch" }
+      ]
+    },
+    {
+      "id": "username",
+      "type": "string",
+      "label": "Nombre de Usuario",
+      "defaultValue": "@usuario_pro"
+    }
+  ]
+}

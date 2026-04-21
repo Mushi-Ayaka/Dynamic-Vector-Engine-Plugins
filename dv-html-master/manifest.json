@@ -1,0 +1,18 @@
+{
+  "id": "dv-html-master",
+  "name": "HTML Master Renderer (v3.4)",
+  "description": "Renderizador profesional de HTML/CSS puro con presets modulares.",
+  "version": "3.4.0",
+  "presets": ["branding", "motion", "layout"],
+  "schema": [
+    { 
+      "type": "info", 
+      "id": "aiPrompt", 
+      "label": "Prompt: Generar Animación Completa", 
+      "defaultValue": "Actúa como experto en Motion Graphics. Genera una animación premium en HTML/CSS para DVGE v3.4. Reglas: 1. Usa clases .dv-glass y var(--accent). 2. Solo Vanilla JS (No React). 3. Animación basada en ctx.frame. 4. Respuesta en 3 bloques (HTML, CSS, JS).\n\nDESCRIPCIÓN: [Escribe aquí qué quieres que haga la animación...]" 
+    },
+    { "type": "code", "id": "htmlCode", "label": "Código HTML", "defaultValue": "<div class='dv-glass' style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;'>\n  <h1 style='color:var(--accent);font-size:80px;margin:0;'>DVGE v3.4</h1>\n  <p class='dv-label' style='font-size:24px;'>Renderizado Maestro Activado</p>\n</div>" },
+    { "type": "code", "id": "cssCode", "label": "Código CSS", "defaultValue": "/* Usa las clases nativas: .dv-glass, .dv-label, var(--accent) */" },
+    { "type": "code", "id": "jsCode", "label": "Código JS", "defaultValue": "dvEngine.register({\n  update: (ctx) => {\n    // Lógica de animación reactiva aquí\n  }\n});" }
+  ]
+}

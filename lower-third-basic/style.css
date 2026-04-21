@@ -1,0 +1,50 @@
+#plugin-container {
+  position: absolute;
+  /* El engine v3.4 provee las variables de Safe Area de TV via Preset 'layout' */
+  bottom: var(--dv-safe-bottom, 150px);
+  left: var(--dv-safe-left, 150px);
+  min-width: 600px;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 45px;
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+#glow-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* background opacity via css global classes */
+  background: rgba(0,0,0,0.4); 
+}
+
+#accent-line {
+  height: 6px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  /* La clase global inyectada usa --accent, enlazada desde el preset 'branding' */
+  background-color: var(--accent);
+  transform-origin: left;
+}
+
+#content-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#title-text {
+  font-size: 64px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+
+#subtitle-text {
+  font-size: 32px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.75);
+}
