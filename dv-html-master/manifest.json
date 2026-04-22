@@ -1,25 +1,64 @@
 {
   "id": "dv-html-master",
   "name": "HTML Master Renderer",
-  "description": "Renderizador profesional de HTML/CSS puro con presets modulares. Ideal para animaciones generadas por IA.",
+  "description": "Renderizador profesional de HTML/CSS/JS puro. Diseña animaciones broadcast completas manualmente o con asistencia de IA.",
   "version": "4.1.5",
   "author": "Jonatan Barón",
   "presets": ["branding", "motion", "layout"],
   "schema": [
-    { 
-      "type": "info", 
-      "id": "aiPrompt", 
-      "label": "Prompt: Generar Animación Completa", 
-      "defaultValue": "Actúa como experto en Motion Graphics. Genera una animación premium en HTML/CSS para DVGE v4.1.5. Reglas:\n1. Usa clases .dv-glass y var(--accent) para colores.\n2. Solo Vanilla JS (No React, No GSAP).\n3. Animación basada en ctx.frame (determinista).\n4. Respuesta en 3 bloques separados (HTML, CSS, JS).\n\nDESCRIPCIÓN: [Escribe aquí qué quieres que haga la animación...]" 
+    {
+      "type": "info",
+      "id": "aiPrompt_full",
+      "label": "🤖 Prompt Completo — Animación Nueva",
+      "defaultValue": "Eres un experto en Motion Graphics para broadcast televisivo. Tu tarea es generar una animación profesional compatible con DVGE v4.1.5 (Dynamic Vector Graphics Engine).\n\n═══════════════════════════════════════\n📐 CONTEXTO TÉCNICO DE DVGE v4.1.5\n═══════════════════════════════════════\n\nEl motor ejecuta cada frame de forma DETERMINISTA usando un loop `update(ctx)`. NO uses:\n  ✗ setTimeout / setInterval\n  ✗ requestAnimationFrame\n  ✗ Date.now() para animaciones\n  ✗ Librerías externas (React, GSAP, Three.js)\n  ✗ Módulos ES (import/export)\n\nUsa SIEMPRE:\n  ✓ ctx.frame — Número de frame actual (entero, comienza en 0)\n  ✓ ctx.utils.lerp(a, b, t) — Interpolación lineal\n  ✓ ctx.utils.clamp(v, min, max) — Limitar valor\n  ✓ ctx.utils.easeOutCubic(t) — Suavizado de salida\n  ✓ ctx.utils.easeInOutCubic(t) — Suavizado entrada/salida\n  ✓ ctx.utils.spring(t, stiffness, damping) — Físicas de resorte\n  ✓ ctx.timeline.introProgress — 0→1 durante la entrada\n  ✓ ctx.timeline.outroProgress — 0→1 durante la salida\n  ✓ ctx.timeline.isOutro — Boolean: ¿está en salida?\n  ✓ ctx.props.X — Valores del schema del usuario\n\n═══════════════════════════════════════\n🎨 SISTEMA DE DISEÑO NATIVO\n═══════════════════════════════════════\n\nClases CSS disponibles sin importar nada:\n  .dv-glass — Fondo semitransparente con blur (glassmorphism)\n  .dv-label — Texto estilo etiqueta (mayúsculas, espaciado)\n  .dv-safe-area — Respeta los márgenes de TV broadcast\n\nVariables CSS globales disponibles:\n  var(--accent) — Color principal de marca (configurable en Presets)\n  var(--dv-safe-top/bottom/left/right) — Márgenes de TV safe area\n\nEl canvas es SIEMPRE 1920×1080px. Diseña para ese tamaño.\n\n═══════════════════════════════════════\n📦 ESTRUCTURA DE RESPUESTA OBLIGATORIA\n═══════════════════════════════════════\n\nResponde EXACTAMENTE en estos 3 bloques, sin texto extra entre ellos:\n\n```html\n[Tu HTML aquí — solo el contenido del body, sin <html> ni <head>]\n```\n\n```css\n[Tu CSS aquí — estilos para tus elementos, usa IDs únicos]\n```\n\n```js\ndvEngine.register({\n  awake: (ctx) => {\n    // Captura referencias DOM aquí (se ejecuta 1 vez)\n    ctx.refs.miElemento = ctx.root.getElementById('mi-id');\n  },\n  update: (ctx) => {\n    // Animación determinista aquí (se ejecuta cada frame)\n    const { frame, utils, timeline, props, refs } = ctx;\n    // Tu lógica...\n  }\n});\n```\n\n═══════════════════════════════════════\n📝 DESCRIPCIÓN DE LA ANIMACIÓN\n═══════════════════════════════════════\n\n[Escribe aquí qué animación quieres. Sé específico: tipo de gráfico, qué textos muestra, colores, estilo visual, comportamiento de entrada y salida, duración estimada...]"
     },
-    { "type": "code", "id": "htmlCode", "label": "Código HTML",
-      "defaultValue": "<div class='dv-glass' style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;'>\n  <h1 style='color:var(--accent);font-size:80px;margin:0;font-weight:900;'>DVGE</h1>\n  <p class='dv-label' style='font-size:20px;letter-spacing:6px;'>v4.1.5 — SMART ENGINE</p>\n</div>"
+    {
+      "type": "info",
+      "id": "aiPrompt_modify",
+      "label": "✏️ Prompt de Modificación — Editar Existente",
+      "defaultValue": "Eres un experto en Motion Graphics para DVGE v4.1.5. Tienes el código de una animación existente en los campos HTML, CSS y JS de este plugin.\n\nTu tarea es MODIFICAR el código existente según la instrucción que te doy a continuación. No reescribas desde cero, solo aplica los cambios necesarios.\n\nReglas:\n  ✓ Mantén la misma estructura de IDs en el HTML\n  ✓ Usa ctx.frame para animaciones (nunca Date.now)\n  ✓ Mantén el dvEngine.register({ awake, update }) intacto\n  ✓ Responde con los 3 bloques completos actualizados (```html ``css ``js`)\n\nMODIFICACIÓN A REALIZAR:\n[Describe aquí qué quieres cambiar: color, tamaño, añadir elemento, cambiar animación, etc.]"
     },
-    { "type": "code", "id": "cssCode",  "label": "Código CSS",
-      "defaultValue": "/* Variables nativas disponibles: --accent, .dv-glass, .dv-label */"
+    {
+      "type": "select",
+      "id": "canvasPreset",
+      "label": "Formato de Canvas",
+      "defaultValue": "1920x1080",
+      "options": [
+        { "label": "1920×1080 — Full HD (Broadcast)", "value": "1920x1080" },
+        { "label": "1280×720 — HD",                   "value": "1280x720"  },
+        { "label": "3840×2160 — 4K UHD",              "value": "3840x2160" }
+      ]
     },
-    { "type": "code", "id": "jsCode",   "label": "Código JS",
-      "defaultValue": "dvEngine.register({\n  awake: (ctx) => {},\n  update: (ctx) => {\n    // ctx.frame — frame actual (determinista)\n    // ctx.utils — lerp, clamp, easeOutCubic, spring...\n    // ctx.props — valores del schema\n  }\n});"
+    {
+      "type": "select",
+      "id": "animStyle",
+      "label": "Estilo Base de Animación",
+      "defaultValue": "none",
+      "options": [
+        { "label": "Sin preset (código manual)",   "value": "none"       },
+        { "label": "Fade — Aparición suave",        "value": "fade"       },
+        { "label": "Slide — Deslizamiento lateral", "value": "slide"      },
+        { "label": "Zoom — Escala desde el centro", "value": "zoom"       },
+        { "label": "Bounce — Rebote elástico",      "value": "bounce"     }
+      ]
+    },
+    {
+      "type": "code",
+      "id": "htmlCode",
+      "label": "Código HTML",
+      "defaultValue": "<div id=\"master-container\" style=\"width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;\">\n  <div id=\"title-block\" style=\"text-align:center;opacity:0;transform:translateY(30px);\">\n    <h1 id=\"main-title\" style=\"color:var(--accent);font-size:96px;font-weight:900;margin:0;letter-spacing:-2px;\">DVGE</h1>\n    <p id=\"sub-title\" class=\"dv-label\" style=\"font-size:18px;letter-spacing:8px;margin-top:12px;\">v4.1.5 — SMART ENGINE</p>\n  </div>\n  <div id=\"accent-bar\" style=\"width:0;height:3px;background:var(--accent);border-radius:2px;\"></div>\n</div>"
+    },
+    {
+      "type": "code",
+      "id": "cssCode",
+      "label": "Código CSS",
+      "defaultValue": "/* Variables disponibles: var(--accent)\n   Clases: .dv-glass, .dv-label, .dv-safe-area\n   Canvas: siempre 1920×1080 */\n\n#master-container {\n  font-family: 'Inter', -apple-system, sans-serif;\n}"
+    },
+    {
+      "type": "code",
+      "id": "jsCode",
+      "label": "Código JS",
+      "defaultValue": "dvEngine.register({\n  awake: (ctx) => {\n    ctx.refs.block  = ctx.root.getElementById('title-block');\n    ctx.refs.bar    = ctx.root.getElementById('accent-bar');\n  },\n  update: (ctx) => {\n    const { refs, timeline, utils } = ctx;\n    const { block, bar } = refs;\n    if (!block || !bar) return;\n\n    // ─── ENTRADA ───────────────────────────────────\n    const ip = utils.clamp(timeline.introProgress, 0, 1);\n    block.style.opacity   = ip.toString();\n    block.style.transform = `translateY(${utils.lerp(30, 0, utils.easeOutCubic(ip))}px)`;\n\n    const barP = utils.clamp((ip - 0.3) / 0.7, 0, 1);\n    bar.style.width = `${utils.lerp(0, 300, utils.easeOutCubic(barP))}px`;\n\n    // ─── SALIDA ────────────────────────────────────\n    if (timeline.isOutro) {\n      const op = utils.clamp(timeline.outroProgress, 0, 1);\n      block.style.opacity = (1 - op).toString();\n      bar.style.width     = `${utils.lerp(300, 0, utils.easeInOutCubic(op))}px`;\n    }\n  }\n});"
     }
   ]
 }
