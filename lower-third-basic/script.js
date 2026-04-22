@@ -1,52 +1,52 @@
+// [v4.1.5] Lower Third Basic — Frame-Math determinista, DOM cacheado en awake
 dvEngine.register({
-  awake: (ctx) => {},
-  start: (ctx) => {},
-  
-  update: (ctx) => {
-    const { frame, root, props, utils, env } = ctx;
-    
-    // Referencias DOM (Optimización: Podrían capturarse en awake en un caso ideal)
-    const container = root.getElementById('plugin-container');
-    const line = root.getElementById('accent-line');
-    const title = root.getElementById('title-text');
-    const subtitle = root.getElementById('subtitle-text');
-    const glow = root.getElementById('glow-bg');
+  awake: (ctx) => {
+    ctx.refs.container = ctx.root.getElementById('plugin-container');
+    ctx.refs.line      = ctx.root.getElementById('accent-line');
+    ctx.refs.title     = ctx.root.getElementById('title-text');
+    ctx.refs.subtitle  = ctx.root.getElementById('subtitle-text');
+    ctx.refs.glow      = ctx.root.getElementById('glow-bg');
+  },
 
+  update: (ctx) => {
+    const { frame, refs, props, utils, env, timeline } = ctx;
+    const { container, line, title, subtitle, glow } = refs;
     if (!container || !line || !title || !subtitle) return;
 
-    // 1. Enlace de Datos Reactivos v3.4 (con fallback a campos predeterminados si faltan en preset)
-    title.innerText = props.title || props.brandName || 'Ana García';
-    subtitle.innerText = props.subtitle || props.brandSlogan || 'Directora';
-    
-    // Inyectar el Color de Marca desde el Preset al Entorno Global CSS del plugin
+    // 1. Datos Reactivos
+    title.innerText    = props.title    || 'Ana García';
+    subtitle.innerText = props.subtitle || 'Directora de Producto';
     container.style.setProperty('--accent', props.brandPrimaryColor || '#E44C30');
 
-    // 2. Animación Parametrizada por el Entorno
-    // Obtener la duración dinámica desde el plugin "motion" o usar 200 frames por defecto
-    const totalFrames = (ctx.settings && ctx.settings.duration * ctx.settings.fps) || 200;
+    // 2. Animación de Entrada via introProgress
+    const ip = utils.clamp(timeline.introProgress, 0, 1);
 
-    // Animación de Entrada
-    const lineProgress = utils.clamp(frame / 20, 0, 1);
-    line.style.transform = `scaleX(${utils.easeOutCubic(lineProgress)})`;
+    // Línea de acento: escala desde la izquierda
+    line.style.transform = `scaleX(${utils.easeOutCubic(ip)})`;
 
-    const titleT = utils.clamp((frame - 5) / 10, 0, 1);
-    title.style.opacity = titleT.toString();
-    title.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(titleT))}px)`;
+    // Título: desliza desde abajo con retraso leve
+    const titleP = utils.clamp((ip - 0.1) / 0.9, 0, 1);
+    title.style.opacity   = titleP.toString();
+    title.style.transform = `translateY(${utils.lerp(25, 0, utils.easeOutCubic(titleP))}px)`;
 
-    const subT = utils.clamp((frame - 10) / 10, 0, 1);
-    subtitle.style.opacity = subT.toString();
-    subtitle.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(subT))}px)`;
+    // Subtítulo: aparece después del título
+    const subP = utils.clamp((ip - 0.25) / 0.75, 0, 1);
+    subtitle.style.opacity   = subP.toString();
+    subtitle.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(subP))}px)`;
 
-    // 3. Salida dinámica basada en el tiempo real
-    const framesDeSalida = 15;
-    const outT = utils.clamp((frame - (totalFrames - framesDeSalida)) / framesDeSalida, 0, 1);
-    container.style.opacity = (1 - utils.easeOutCubic(outT)).toString();
+    // 3. Salida via outroProgress
+    if (timeline.isOutro) {
+      const op = utils.clamp(timeline.outroProgress, 0, 1);
+      container.style.opacity   = (1 - utils.easeInOutCubic(op)).toString();
+      container.style.transform = `translateX(${utils.lerp(0, -30, utils.easeInOutCubic(op))}px)`;
+    } else {
+      container.style.opacity = '1';
+    }
 
-    // 4. Optimización de Rendering con env.isExporting
+    // 4. Optimización para exportación
     if (env.isExporting && glow) {
-        // En algunos casos deshabilitar el filter/blur global mejora el tiempo de render 
-        glow.style.backdropFilter = 'none';
-        glow.style.background = 'rgba(0,0,0,0.8)'; // Fallback sólido oscuro
+      glow.style.backdropFilter = 'none';
+      glow.style.background     = 'rgba(0,0,0,0.75)';
     }
   }
 });

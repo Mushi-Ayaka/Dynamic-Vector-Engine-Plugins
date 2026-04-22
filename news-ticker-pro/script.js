@@ -1,40 +1,34 @@
+// [v4.1.5] News Ticker Pro — Loop determinista basado en frame, DOM cacheado
 dvEngine.register({
     awake: (ctx) => {
-        ctx._els = {
-            track: ctx.root.getElementById('ticker-track'),
-            text1: ctx.root.getElementById('ticker-text'),
-            text2: ctx.root.getElementById('ticker-text-copy'),
-            label: ctx.root.getElementById('ticker-label')
-        };
-        ctx._state = { x: 0 };
+        ctx.refs.track  = ctx.root.getElementById('ticker-track');
+        ctx.refs.text1  = ctx.root.getElementById('ticker-text');
+        ctx.refs.text2  = ctx.root.getElementById('ticker-text-copy');
+        ctx.refs.label  = ctx.root.getElementById('ticker-label');
+        ctx._state      = { x: 0 };
     },
 
     update: (ctx) => {
-        const { frame, props, _els, _state } = ctx;
+        const { frame, props, refs, _state } = ctx;
+        const { track, text1, text2, label } = refs;
+        if (!track || !text1 || !text2) return;
 
-        // 1. Sincronizar Datos
-        if (_els.text1) _els.text1.innerText = props.tickerText;
-        if (_els.text2) _els.text2.innerText = props.tickerText;
-        
-        // Sincronizar color de marca con el badge
-        if (_els.label) {
-            _els.label.style.background = props.brandPrimaryColor || 'var(--accent)';
+        // 1. Datos reactivos
+        const text = props.tickerText || '— DVGE Engine —';
+        if (text1.innerText !== text) {
+            text1.innerText = text;
+            text2.innerText = text;
         }
 
-        // 2. Lógica de Desplazamiento (Crawl)
-        // Medimos el ancho de un bloque de texto para el loop
-        const textWidth = _els.text1.offsetWidth + 50; // 50 es el margin-left del copy
-        
-        const speed = props.scrollSpeed || 4;
-        _state.x -= speed;
+        // Color de acento del preset de branding
+        const accent = props.brandPrimaryColor || '#E44C30';
+        if (label) label.style.background = accent;
 
-        // Reset para loop infinito suave
-        if (Math.abs(_state.x) >= textWidth) {
-            _state.x = 0;
-        }
+        // 2. Desplazamiento determinista por frame (no depende de Date.now)
+        const speed    = props.scrollSpeed || 4;
+        const textW    = (text1.offsetWidth || 600) + 50;
+        _state.x       = -((frame * speed) % textW);
 
-        if (_els.track) {
-            _els.track.style.transform = `translateX(${_state.x}px)`;
-        }
+        track.style.transform = `translateX(${_state.x}px)`;
     }
 });

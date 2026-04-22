@@ -1,20 +1,21 @@
 {
   "id": "lower-third-basic",
-  "name": "Lower Third (Basic v3.4)",
-  "description": "Banda de texto clásica. Ahora potenciada por Presets Modulares y optimizada para Broadcast.",
-  "version": "3.4.0",
+  "name": "Lower Third (Basic)",
+  "description": "Banda de texto clásica con animación de entrada suave. Potenciada por Presets Modulares y optimizada para Broadcast.",
+  "version": "4.1.5",
+  "author": "Jonatan Barón",
   "presets": ["branding", "motion", "layout"],
   "schema": [
     { 
       "type": "info", 
       "id": "aiPrompt", 
       "label": "Prompt: Personalizar Banda", 
-      "defaultValue": "Actúa como experto en Motion Graphics. Genera un efecto visual o transición para una banda (Lower Third) en DVGE v3.4. Reglas: 1. Usa var(--accent) para colores de marca. 2. La animación debe ocurrir en el área inferior. 3. Solo Vanilla JS.\n\nMODIFICACIÓN: [Escribe aquí qué efecto quieres añadir a la banda...]" 
+      "defaultValue": "Actúa como experto en Motion Graphics. Genera un efecto visual o transición para una banda (Lower Third) en DVGE v4.1.5. Reglas: 1. Usa var(--accent) para colores de marca. 2. La animación debe ocurrir en el área inferior. 3. Solo Vanilla JS.\n\nMODIFICACIÓN: [Escribe aquí qué efecto quieres añadir a la banda...]" 
     },
     {
       "type": "string",
       "id": "title",
-      "label": "Título Principal",
+      "label": "Nombre / Título",
       "defaultValue": "Ana García"
     },
     {
