@@ -1,26 +1,326 @@
 {
   "plugins": [
     {
-      "id": "lower-third-modern",
-      "name": "Lower Third Modern",
-      "description": "Banda de texto minimalista con animación de entrada lateral y desenfoque glassmorphism.",
-      "version": "1.1.0",
+      "id": "cinematic-opener-pro",
+      "name": "Apertura Cinématica Minimalista",
+      "description": "Títulos elegantes con efectos de aparición suave y kerning dinámico (Opener). 100% Vanilla JS.",
+      "version": "4.0.0",
       "author": "Jonatan Barón",
-      "updatedAt": "2026-04-21T18:00:00Z",
+      "updatedAt": "2026-04-22T09:06:29.545Z",
       "files": {
         "manifest": {
-          "id": "lower-third-modern",
-          "name": "Lower Third Modern",
-          "description": "Minimalist broadcast lower third.",
-          "version": "1.1.0",
+          "id": "cinematic-opener-pro",
+          "name": "Apertura Cinématica Minimalista",
+          "description": "Títulos elegantes con efectos de aparición suave y kerning dinámico (Opener). 100% Vanilla JS.",
+          "version": "4.0.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
           "schema": [
-            { "type": "string", "id": "name", "label": "Nombre", "defaultValue": "Jonatan Barón" },
-            { "type": "string", "id": "role", "label": "Rol", "defaultValue": "Senior Developer" }
+            {
+              "id": "title",
+              "type": "string",
+              "label": "Título Principal",
+              "defaultValue": "DISEÑO MODULAR"
+            },
+            {
+              "id": "subtitle",
+              "type": "string",
+              "label": "Subtítulo / Serie",
+              "defaultValue": "DV-ENGINE SERIES"
+            }
           ]
         },
-        "html": "<div id='card' class='dv-glass dv-safe-area'><h1 id='n'></h1><p id='r'></p></div>",
-        "css": "#card { padding: 20px; border-radius: 10px; border-left: 5px solid var(--accent); } #n { font-size: 32px; color: white; margin: 0; } #r { font-size: 18px; color: #ccc; margin: 0; }",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.n = ctx.root.getElementById('n'); ctx.refs.r = ctx.root.getElementById('r'); }, update: (ctx) => { ctx.refs.n.innerText = ctx.props.name; ctx.refs.r.innerText = ctx.props.role; } });"
+        "html": "<div id=\"opener-container\" style=\"display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 0;\">\r\n  <div id=\"sub-title\" class=\"dv-label\" style=\"font-size: 14px; margin-bottom: 10px; color: var(--accent); letter-spacing: 5px;\"></div>\r\n  <div id=\"main-title\" style=\"color: white; font-size: 80px; font-weight: 900; letter-spacing: 20px; line-height: 1; text-transform: uppercase;\"></div>\r\n  <div id=\"accent-line\" style=\"width: 0; height: 4px; background: var(--accent); margin-top: 30px;\"></div>\r\n</div>",
+        "css": "",
+        "js": "dvEngine.register({\r\n    awake: (ctx) => {\r\n        // [v4.0] Tarea 5.2: Usando ctx.refs oficial en lugar de ctx._els\r\n        ctx.refs.container = ctx.root.getElementById('opener-container');\r\n        ctx.refs.title     = ctx.root.getElementById('main-title');\r\n        ctx.refs.subtitle  = ctx.root.getElementById('sub-title');\r\n        ctx.refs.line      = ctx.root.getElementById('accent-line');\r\n    },\r\n\r\n    update: (ctx) => {\r\n        const { props, refs, timeline, utils } = ctx;\r\n        const { container, title, subtitle, line } = refs;\r\n        if (!container || !title || !subtitle || !line) return;\r\n\r\n        // 1. Datos Reactivos\r\n        title.innerText    = props.title    || 'DISEÑO MODULAR';\r\n        subtitle.innerText = props.subtitle || 'DV-ENGINE SERIES';\r\n\r\n        // ─── ENTRADA ────────────────────────────────────────────────\r\n        // ctx.timeline.introProgress va de 0→1 durante los primeros ~0.8s\r\n        const ip = timeline.introProgress;\r\n\r\n        // Física de resorte para el título (reemplaza gsap back.out)\r\n        const springT  = utils.spring(ip, 180, 18);\r\n        // Texto kerning: se contrae desde 50px → 20px con el progreso\r\n        const kerning  = utils.lerp(50, 20, utils.easeOutCubic(ip));\r\n\r\n        container.style.opacity = ip.toString();\r\n        title.style.letterSpacing = `${kerning}px`;\r\n        title.style.opacity       = ip.toString();\r\n        title.style.transform     = `translateY(${utils.lerp(30, 0, springT)}px)`;\r\n\r\n        // Subtítulo con retraso (usa progreso más avanzado)\r\n        const subP = utils.clamp((ip - 0.25) / 0.75, 0, 1);\r\n        subtitle.style.opacity   = subP.toString();\r\n        subtitle.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(subP))}px)`;\r\n\r\n        // Línea de acento: crece en ancho\r\n        const lineW = utils.lerp(0, 200, utils.easeOutCubic(utils.clamp((ip - 0.3) / 0.7, 0, 1)));\r\n        line.style.width = `${lineW}px`;\r\n\r\n        // ─── SALIDA ─────────────────────────────────────────────────\r\n        // ctx.timeline.outroProgress va de 0→1 durante los últimos ~0.5s\r\n        if (timeline.isOutro) {\r\n            const op = timeline.outroProgress;\r\n            container.style.opacity = (1 - op).toString();\r\n            container.style.transform = `translateY(${utils.lerp(0, -30, utils.easeInOutCubic(op))}px)`;\r\n        }\r\n    }\r\n});"
+      }
+    },
+    {
+      "id": "dv-html-master",
+      "name": "HTML Master Renderer (v3.4)",
+      "description": "Renderizador profesional de HTML/CSS puro con presets modulares.",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.551Z",
+      "files": {
+        "manifest": {
+          "id": "dv-html-master",
+          "name": "HTML Master Renderer (v3.4)",
+          "description": "Renderizador profesional de HTML/CSS puro con presets modulares.",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "type": "info",
+              "id": "aiPrompt",
+              "label": "Prompt: Generar Animación Completa",
+              "defaultValue": "Actúa como experto en Motion Graphics. Genera una animación premium en HTML/CSS para DVGE v3.4. Reglas: 1. Usa clases .dv-glass y var(--accent). 2. Solo Vanilla JS (No React). 3. Animación basada en ctx.frame. 4. Respuesta en 3 bloques (HTML, CSS, JS).\n\nDESCRIPCIÓN: [Escribe aquí qué quieres que haga la animación...]"
+            },
+            {
+              "type": "code",
+              "id": "htmlCode",
+              "label": "Código HTML",
+              "defaultValue": "<div class='dv-glass' style='display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;'>\n  <h1 style='color:var(--accent);font-size:80px;margin:0;'>DVGE v3.4</h1>\n  <p class='dv-label' style='font-size:24px;'>Renderizado Maestro Activado</p>\n</div>"
+            },
+            {
+              "type": "code",
+              "id": "cssCode",
+              "label": "Código CSS",
+              "defaultValue": "/* Usa las clases nativas: .dv-glass, .dv-label, var(--accent) */"
+            },
+            {
+              "type": "code",
+              "id": "jsCode",
+              "label": "Código JS",
+              "defaultValue": "dvEngine.register({\n  update: (ctx) => {\n    // Lógica de animación reactiva aquí\n  }\n});"
+            }
+          ]
+        },
+        "html": "<div id=\"master-root\">\r\n    <style id=\"master-dynamic-style\"></style>\r\n    <div id=\"master-render-pane\"></div>\r\n</div>",
+        "css": "",
+        "js": "dvEngine.register({\r\n  awake: (ctx) => {\r\n    ctx._el = {\r\n      root: ctx.root.getElementById('master-root'),\r\n      style: ctx.root.getElementById('master-dynamic-style'),\r\n      pane: ctx.root.getElementById('master-render-pane')\r\n    };\r\n    \r\n    if (ctx._el.root) {\r\n        ctx._el.root.style.width = '1920px';\r\n        ctx._el.root.style.height = '1080px';\r\n        ctx._el.root.style.position = 'absolute';\r\n    }\r\n    \r\n    if (ctx._el.pane) {\r\n        ctx._el.pane.style.width = '100%';\r\n        ctx._el.pane.style.height = '100%';\r\n    }\r\n    \r\n    ctx._lastHtml = \"\";\r\n    ctx._lastCss = \"\";\r\n  },\r\n  \r\n  update: (ctx) => {\r\n    const { props, _el } = ctx;\r\n    if (!_el.pane || !_el.style) return;\r\n\r\n    // Inyectar CSS dinámico (solo si cambia para optimizar)\r\n    const currentCss = props.cssCode || '';\r\n    if (ctx._lastCss !== currentCss) {\r\n        _el.style.textContent = currentCss;\r\n        ctx._lastCss = currentCss;\r\n    }\r\n\r\n    // Inyectar HTML dinámico\r\n    const currentHtml = props.htmlCode || '';\r\n    if (ctx._lastHtml !== currentHtml) {\r\n        _el.pane.innerHTML = currentHtml;\r\n        ctx._lastHtml = currentHtml;\r\n    }\r\n    \r\n    // Inyectar color de acento de presets\r\n    const headerColor = props.brandPrimaryColor || '#E44C30';\r\n    if (_el.root) {\r\n        _el.root.style.setProperty('--accent', headerColor);\r\n    }\r\n  }\r\n});"
+      }
+    },
+    {
+      "id": "live-info-widget",
+      "name": "Widget de Reloj y Clima",
+      "description": "Información de tiempo y clima en vivo para esquinas de pantalla (Live Info).",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.552Z",
+      "files": {
+        "manifest": {
+          "id": "live-info-widget",
+          "name": "Widget de Reloj y Clima",
+          "description": "Información de tiempo y clima en vivo para esquinas de pantalla (Live Info).",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "id": "location",
+              "type": "string",
+              "label": "Ubicación",
+              "defaultValue": "MADRID, ES"
+            },
+            {
+              "id": "temp",
+              "type": "string",
+              "label": "Temperatura",
+              "defaultValue": "22°C"
+            }
+          ]
+        },
+        "html": "",
+        "css": "",
+        "js": "dvEngine.register({\r\n    awake: (ctx) => {\r\n        ctx._els = {\r\n            time: ctx.root.getElementById('current-time'),\r\n            temp: ctx.root.getElementById('current-temp'),\r\n            location: ctx.root.getElementById('current-location')\r\n        };\r\n    },\r\n\r\n    update: (ctx) => {\r\n        const { props, _els } = ctx;\r\n\r\n        // 1. Reloj en tiempo real\r\n        // Nota: En Remotion/Render, el tiempo suele ser estático por frame,\r\n        // pero aquí simulamos un reloj que avanza.\r\n        const now = new Date();\r\n        const hours = String(now.getHours()).padStart(2, '0');\r\n        const mins = String(now.getMinutes()).padStart(2, '0');\r\n        \r\n        if (_els.time) _els.time.innerText = `${hours}:${mins}`;\r\n        if (_els.temp) _els.temp.innerText = props.temp;\r\n        if (_els.location) _els.location.innerText = props.location;\r\n    }\r\n});"
+      }
+    },
+    {
+      "id": "lower-third-basic",
+      "name": "Lower Third (Basic v3.4)",
+      "description": "Banda de texto clásica. Ahora potenciada por Presets Modulares y optimizada para Broadcast.",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.553Z",
+      "files": {
+        "manifest": {
+          "id": "lower-third-basic",
+          "name": "Lower Third (Basic v3.4)",
+          "description": "Banda de texto clásica. Ahora potenciada por Presets Modulares y optimizada para Broadcast.",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "type": "info",
+              "id": "aiPrompt",
+              "label": "Prompt: Personalizar Banda",
+              "defaultValue": "Actúa como experto en Motion Graphics. Genera un efecto visual o transición para una banda (Lower Third) en DVGE v3.4. Reglas: 1. Usa var(--accent) para colores de marca. 2. La animación debe ocurrir en el área inferior. 3. Solo Vanilla JS.\n\nMODIFICACIÓN: [Escribe aquí qué efecto quieres añadir a la banda...]"
+            },
+            {
+              "type": "string",
+              "id": "title",
+              "label": "Título Principal",
+              "defaultValue": "Ana García"
+            },
+            {
+              "type": "string",
+              "id": "subtitle",
+              "label": "Cargo / Detalle",
+              "defaultValue": "Directora de Producto"
+            }
+          ]
+        },
+        "html": "<div id=\"plugin-container\">\r\n  <div id=\"glow-bg\" class=\"dv-glass\"></div>\r\n  <div id=\"accent-line\"></div>\r\n  <div id=\"content-body\">\r\n    <div id=\"title-text\">Ana García</div>\r\n    <div id=\"subtitle-text\">Directora de Producto</div>\r\n  </div>\r\n</div>",
+        "css": "#plugin-container {\r\n  position: absolute;\r\n  /* El engine v3.4 provee las variables de Safe Area de TV via Preset 'layout' */\r\n  bottom: var(--dv-safe-bottom, 150px);\r\n  left: var(--dv-safe-left, 150px);\r\n  min-width: 600px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  padding: 24px 45px;\r\n  border-radius: 6px;\r\n  overflow: hidden;\r\n  font-family: 'Inter', -apple-system, sans-serif;\r\n}\r\n\r\n#glow-bg {\r\n  position: absolute;\r\n  inset: 0;\r\n  z-index: -1;\r\n  /* background opacity via css global classes */\r\n  background: rgba(0,0,0,0.4); \r\n}\r\n\r\n#accent-line {\r\n  height: 6px;\r\n  border-radius: 3px;\r\n  margin-bottom: 8px;\r\n  /* La clase global inyectada usa --accent, enlazada desde el preset 'branding' */\r\n  background-color: var(--accent);\r\n  transform-origin: left;\r\n}\r\n\r\n#content-body {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 4px;\r\n}\r\n\r\n#title-text {\r\n  font-size: 64px;\r\n  font-weight: 800;\r\n  color: white;\r\n  letter-spacing: -1.5px;\r\n  line-height: 1;\r\n}\r\n\r\n#subtitle-text {\r\n  font-size: 32px;\r\n  font-weight: 400;\r\n  color: rgba(255,255,255,0.75);\r\n}",
+        "js": "dvEngine.register({\r\n  awake: (ctx) => {},\r\n  start: (ctx) => {},\r\n  \r\n  update: (ctx) => {\r\n    const { frame, root, props, utils, env } = ctx;\r\n    \r\n    // Referencias DOM (Optimización: Podrían capturarse en awake en un caso ideal)\r\n    const container = root.getElementById('plugin-container');\r\n    const line = root.getElementById('accent-line');\r\n    const title = root.getElementById('title-text');\r\n    const subtitle = root.getElementById('subtitle-text');\r\n    const glow = root.getElementById('glow-bg');\r\n\r\n    if (!container || !line || !title || !subtitle) return;\r\n\r\n    // 1. Enlace de Datos Reactivos v3.4 (con fallback a campos predeterminados si faltan en preset)\r\n    title.innerText = props.title || props.brandName || 'Ana García';\r\n    subtitle.innerText = props.subtitle || props.brandSlogan || 'Directora';\r\n    \r\n    // Inyectar el Color de Marca desde el Preset al Entorno Global CSS del plugin\r\n    container.style.setProperty('--accent', props.brandPrimaryColor || '#E44C30');\r\n\r\n    // 2. Animación Parametrizada por el Entorno\r\n    // Obtener la duración dinámica desde el plugin \"motion\" o usar 200 frames por defecto\r\n    const totalFrames = (ctx.settings && ctx.settings.duration * ctx.settings.fps) || 200;\r\n\r\n    // Animación de Entrada\r\n    const lineProgress = utils.clamp(frame / 20, 0, 1);\r\n    line.style.transform = `scaleX(${utils.easeOutCubic(lineProgress)})`;\r\n\r\n    const titleT = utils.clamp((frame - 5) / 10, 0, 1);\r\n    title.style.opacity = titleT.toString();\r\n    title.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(titleT))}px)`;\r\n\r\n    const subT = utils.clamp((frame - 10) / 10, 0, 1);\r\n    subtitle.style.opacity = subT.toString();\r\n    subtitle.style.transform = `translateY(${utils.lerp(20, 0, utils.easeOutCubic(subT))}px)`;\r\n\r\n    // 3. Salida dinámica basada en el tiempo real\r\n    const framesDeSalida = 15;\r\n    const outT = utils.clamp((frame - (totalFrames - framesDeSalida)) / framesDeSalida, 0, 1);\r\n    container.style.opacity = (1 - utils.easeOutCubic(outT)).toString();\r\n\r\n    // 4. Optimización de Rendering con env.isExporting\r\n    if (env.isExporting && glow) {\r\n        // En algunos casos deshabilitar el filter/blur global mejora el tiempo de render \r\n        glow.style.backdropFilter = 'none';\r\n        glow.style.background = 'rgba(0,0,0,0.8)'; // Fallback sólido oscuro\r\n    }\r\n  }\r\n});"
+      }
+    },
+    {
+      "id": "news-ticker-pro",
+      "name": "Cinta de Noticias Dinámica",
+      "description": "Cinta de noticias de desplazamiento horizontal suave para directos (Crawl).",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.554Z",
+      "files": {
+        "manifest": {
+          "id": "news-ticker-pro",
+          "name": "Cinta de Noticias Dinámica",
+          "description": "Cinta de noticias de desplazamiento horizontal suave para directos (Crawl).",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "id": "tickerText",
+              "type": "string",
+              "label": "Texto de la Cinta",
+              "defaultValue": "NOTICIA DE ÚLTIMA HORA: El Dynamic Vector Graphics Engine v3.4.0 ya está disponible con soporte modular..."
+            },
+            {
+              "id": "scrollSpeed",
+              "type": "number",
+              "label": "Velocidad de Desplazamiento",
+              "defaultValue": 4
+            }
+          ]
+        },
+        "html": "<div id=\"ticker-container\" class=\"dv-glass\" style=\"width: 100vw; height: 50px; display: flex; align-items: center; overflow: hidden; position: relative; border-bottom: 2px solid var(--accent);\">\r\n  <div id=\"ticker-label\" style=\"background: var(--accent); color: white; padding: 0 20px; height: 100%; display: flex; align-items: center; font-weight: bold; font-size: 14px; z-index: 10; white-space: nowrap;\">\r\n    ÚLTIMA HORA\r\n  </div>\r\n  <div id=\"ticker-track\" style=\"display: flex; white-space: nowrap; padding-left: 20px;\">\r\n    <span id=\"ticker-text\" style=\"color: white; font-size: 20px; text-transform: uppercase; font-weight: 500;\"></span>\r\n    <!-- El JS duplicará el texto para el efecto de loop infinito si es necesario -->\r\n    <span id=\"ticker-text-copy\" style=\"color: white; font-size: 20px; text-transform: uppercase; font-weight: 500; margin-left: 50px;\"></span>\r\n  </div>\r\n</div>",
+        "css": "",
+        "js": "dvEngine.register({\r\n    awake: (ctx) => {\r\n        ctx._els = {\r\n            track: ctx.root.getElementById('ticker-track'),\r\n            text1: ctx.root.getElementById('ticker-text'),\r\n            text2: ctx.root.getElementById('ticker-text-copy'),\r\n            label: ctx.root.getElementById('ticker-label')\r\n        };\r\n        ctx._state = { x: 0 };\r\n    },\r\n\r\n    update: (ctx) => {\r\n        const { frame, props, _els, _state } = ctx;\r\n\r\n        // 1. Sincronizar Datos\r\n        if (_els.text1) _els.text1.innerText = props.tickerText;\r\n        if (_els.text2) _els.text2.innerText = props.tickerText;\r\n        \r\n        // Sincronizar color de marca con el badge\r\n        if (_els.label) {\r\n            _els.label.style.background = props.brandPrimaryColor || 'var(--accent)';\r\n        }\r\n\r\n        // 2. Lógica de Desplazamiento (Crawl)\r\n        // Medimos el ancho de un bloque de texto para el loop\r\n        const textWidth = _els.text1.offsetWidth + 50; // 50 es el margin-left del copy\r\n        \r\n        const speed = props.scrollSpeed || 4;\r\n        _state.x -= speed;\r\n\r\n        // Reset para loop infinito suave\r\n        if (Math.abs(_state.x) >= textWidth) {\r\n            _state.x = 0;\r\n        }\r\n\r\n        if (_els.track) {\r\n            _els.track.style.transform = `translateX(${_state.x}px)`;\r\n        }\r\n    }\r\n});"
+      }
+    },
+    {
+      "id": "scoreboard-pro",
+      "name": "Marcador Deportivo Elite",
+      "description": "Panel superior para mostrar resultados, equipos y tiempo de juego (Scoreboard).",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.555Z",
+      "files": {
+        "manifest": {
+          "id": "scoreboard-pro",
+          "name": "Marcador Deportivo Elite",
+          "description": "Panel superior para mostrar resultados, equipos y tiempo de juego (Scoreboard).",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "id": "teamA",
+              "type": "string",
+              "label": "Equipo Local",
+              "defaultValue": "TEAM A"
+            },
+            {
+              "id": "scoreA",
+              "type": "number",
+              "label": "Puntos A",
+              "defaultValue": 0
+            },
+            {
+              "id": "teamB",
+              "type": "string",
+              "label": "Equipo Visitante",
+              "defaultValue": "TEAM B"
+            },
+            {
+              "id": "scoreB",
+              "type": "number",
+              "label": "Puntos B",
+              "defaultValue": 0
+            },
+            {
+              "id": "matchTime",
+              "type": "string",
+              "label": "Tiempo / Periodo",
+              "defaultValue": "1ST HALF"
+            }
+          ]
+        },
+        "html": "<div id=\"scoreboard\" class=\"dv-glass\" style=\"display: flex; height: 50px; min-width: 450px; overflow: hidden; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);\">\r\n  \r\n  <!-- Equipo A -->\r\n  <div style=\"flex: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); padding: 0 15px;\">\r\n    <span id=\"team-a-name\" style=\"color: white; font-weight: bold; text-transform: uppercase; font-size: 16px;\"></span>\r\n  </div>\r\n\r\n  <!-- Score Central -->\r\n  <div style=\"width: 120px; display: flex; background: var(--accent); position: relative;\">\r\n    <div style=\"flex: 1; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: white;\" id=\"team-a-score\">0</div>\r\n    <div style=\"width: 1px; height: 60%; background: rgba(255,255,255,0.3); align-self: center;\"></div>\r\n    <div style=\"flex: 1; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: white;\" id=\"team-b-score\">0</div>\r\n  </div>\r\n\r\n  <!-- Equipo B -->\r\n  <div style=\"flex: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); padding: 0 15px;\">\r\n    <span id=\"team-b-name\" style=\"color: white; font-weight: bold; text-transform: uppercase; font-size: 16px;\"></span>\r\n  </div>\r\n\r\n  <!-- Timer / Info -->\r\n  <div style=\"width: 100px; background: #000; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--accent);\">\r\n    <span id=\"match-time\" class=\"dv-label\" style=\"font-size: 10px; color: var(--accent);\"></span>\r\n  </div>\r\n\r\n</div>",
+        "css": "",
+        "js": "dvEngine.register({\r\n    awake: (ctx) => {\r\n        // [v4.0] Usando ctx.refs oficial\r\n        ctx.refs.board    = ctx.root.getElementById('scoreboard');\r\n        ctx.refs.teamA    = ctx.root.getElementById('team-a-name');\r\n        ctx.refs.scoreA   = ctx.root.getElementById('team-a-score');\r\n        ctx.refs.teamB    = ctx.root.getElementById('team-b-name');\r\n        ctx.refs.scoreB   = ctx.root.getElementById('team-b-score');\r\n        ctx.refs.time     = ctx.root.getElementById('match-time');\r\n    },\r\n\r\n    update: (ctx) => {\r\n        const { props, refs, timeline, utils } = ctx;\r\n        const { board, teamA, scoreA, teamB, scoreB, time } = refs;\r\n        if (!board || !teamA) return;\r\n\r\n        // 1. Sincronización de Datos Reactivos\r\n        teamA.innerText  = props.teamA   || 'TEAM A';\r\n        scoreA.innerText = props.scoreA  ?? 0;\r\n        teamB.innerText  = props.teamB   || 'TEAM B';\r\n        scoreB.innerText = props.scoreB  ?? 0;\r\n        time.innerText   = props.matchTime || '1ST HALF';\r\n\r\n        // ─── ENTRADA ────────────────────────────────────────────────\r\n        // Tarea 5.3: El plugin tiene la responsabilidad total de sus propias transiciones.\r\n        // El preset 'motion' provee los valores, pero el código aplica los transforms.\r\n        const ip = timeline.introProgress;\r\n\r\n        // Deslizamiento desde abajo con resorte\r\n        const springVal = utils.spring(ip, 200, 22);\r\n        board.style.opacity   = ip.toString();\r\n        board.style.transform = `translateY(${utils.lerp(40, 0, springVal)}px)`;\r\n\r\n        // ─── SALIDA ─────────────────────────────────────────────────\r\n        if (timeline.isOutro) {\r\n            const op = timeline.outroProgress;\r\n            board.style.opacity   = (1 - op).toString();\r\n            board.style.transform = `translateY(${utils.lerp(0, 40, utils.easeInOutCubic(op))}px)`;\r\n        }\r\n    }\r\n});"
+      }
+    },
+    {
+      "id": "social-cards-pro",
+      "name": "Tarjetas de Redes Sociales Pro",
+      "description": "Animación de entrada con rebote para perfiles de redes sociales (Pop-up).",
+      "version": "3.4.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-22T09:06:29.556Z",
+      "files": {
+        "manifest": {
+          "id": "social-cards-pro",
+          "name": "Tarjetas de Redes Sociales Pro",
+          "description": "Animación de entrada con rebote para perfiles de redes sociales (Pop-up).",
+          "version": "3.4.0",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "externalScripts": [
+            "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+          ],
+          "schema": [
+            {
+              "id": "platform",
+              "type": "select",
+              "label": "Plataforma",
+              "defaultValue": "instagram",
+              "options": [
+                {
+                  "label": "Instagram",
+                  "value": "instagram"
+                },
+                {
+                  "label": "X (Twitter)",
+                  "value": "twitter"
+                },
+                {
+                  "label": "YouTube",
+                  "value": "youtube"
+                },
+                {
+                  "label": "Twitch",
+                  "value": "twitch"
+                }
+              ]
+            },
+            {
+              "id": "username",
+              "type": "string",
+              "label": "Nombre de Usuario",
+              "defaultValue": "@usuario_pro"
+            }
+          ]
+        },
+        "html": "<div id=\"social-card\" class=\"dv-glass\" style=\"display: flex; align-items: center; padding: 10px 20px; gap: 15px; min-width: 250px; opacity: 0; transform: scale(0.8);\">\r\n  <div id=\"icon-container\" style=\"width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--accent); border-radius: 8px;\">\r\n    <!-- Icono inyectado por JS -->\r\n    <svg id=\"social-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></svg>\r\n  </div>\r\n  <div style=\"display: flex; flexDirection: column;\">\r\n    <span id=\"platform-name\" class=\"dv-label\" style=\"font-size: 10px; margin-bottom: 2px;\">PLATAFORMA</span>\r\n    <span id=\"user-display\" style=\"color: white; font-weight: bold; font-size: 18px;\">@usuario</span>\r\n  </div>\r\n</div>",
+        "css": "#social-card {\r\n    border-left: 4px solid var(--accent);\r\n    box-shadow: 0 8px 32px rgba(0,0,0,0.3);\r\n}\r\n\r\n#icon-container svg {\r\n    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\r\n}\r\n\r\n#user-display {\r\n    text-shadow: 0 2px 4px rgba(0,0,0,0.3);\r\n}",
+        "js": "const ICONS = {\r\n    instagram: '<rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"5\" ry=\"5\"></rect><path d=\"M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z\"></path><line x1=\"17.5\" y1=\"6.5\" x2=\"17.51\" y2=\"6.5\"></line>',\r\n    twitter: '<path d=\"M22 4s-2 1-3.3 1.2c-1.3-1.1-3.1-1.8-5-1.8-3.8 0-7 3.2-7 7 0 .5.1 1 .2 1.5-5.7-.3-10.7-3-14.1-7.2 0 0-1.5 2.5-.5 5.5 0 1.5 1 2.8 2.3 3.6-1 0-2-.3-2.8-.8 0 2.1 1.5 3.9 3.5 4.3-.4.1-.8.1-1.2.1-.3 0-.6 0-.9-.1.5 1.7 2.1 3 4 3-1.5 1.2-3.4 1.9-5.5 1.9-.4 0-.7 0-1.1-.1 2.1 1.3 4.5 2.1 7.2 2.1 8.6 0 13.3-7.1 13.3-13.3 0-.2 0-.4 0-.6C21 6.5 22 5 22 4z\"></path>',\r\n    youtube: '<path d=\"M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z\"></path><polygon points=\"9.75 15.02 15.5 12 9.75 8.98 9.75 15.02\"></polygon>',\r\n    twitch: '<path d=\"M21 2H3v16h5v4l4-4h5l4-4V2zm-2 13h-4l-3 3v-3H5V4h14v11z\"></path><path d=\"M16 7h-2v4h2V7zm-4 0h-2v4h2V7z\"></path>'\r\n};\r\n\r\ndvEngine.register({\r\n    awake: (ctx) => {\r\n        ctx._els = {\r\n            card: ctx.root.getElementById('social-card'),\r\n            icon: ctx.root.getElementById('social-icon'),\r\n            platform: ctx.root.getElementById('platform-name'),\r\n            user: ctx.root.getElementById('user-display')\r\n        };\r\n        ctx._state = { animStarted: false };\r\n    },\r\n\r\n    update: (ctx) => {\r\n        const { frame, props, _els, _state } = ctx;\r\n        \r\n        // Sincronizar Datos\r\n        if (_els.user) _els.user.innerText = props.username;\r\n        if (_els.platform) _els.platform.innerText = props.platform.toUpperCase();\r\n        if (_els.icon) _els.icon.innerHTML = ICONS[props.platform] || ICONS.instagram;\r\n\r\n        // Lógica de Animación con GSAP\r\n        // 1. Entrada (Bounce)\r\n        if (frame === 1 && !_state.animStarted) {\r\n            _state.animStarted = true;\r\n            gsap.to(_els.card, {\r\n                opacity: 1,\r\n                scale: 1,\r\n                duration: 0.8,\r\n                ease: \"back.out(1.7)\"\r\n            });\r\n        }\r\n\r\n        // 2. Salida (Cálculo basado en duración total)\r\n        // Convertimos FPS a frames para saber cuándo faltan 30 frames para terminar\r\n        const endFrame = ctx.settings.fps * ctx.settings.duration;\r\n        const exitStart = endFrame - 20;\r\n\r\n        if (frame === exitStart) {\r\n            gsap.to(_els.card, {\r\n                opacity: 0,\r\n                x: -50,\r\n                duration: 0.5,\r\n                ease: \"power2.in\"\r\n            });\r\n        }\r\n    }\r\n});"
       }
     }
   ]
