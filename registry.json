@@ -1,37 +1,6 @@
 {
   "plugins": [
     {
-      "id": "infra-diagnostic",
-      "name": "🚨 DIAGNÓSTICO DE INFRAESTRUCTURA",
-      "description": "Plugin ultra-simple para verificar si el motor puede renderizar color y texto sin capas complejas.",
-      "version": "1.0.0",
-      "author": "Antigravity Debugger",
-      "updatedAt": "2026-04-23T16:52:43.154Z",
-      "files": {
-        "manifest": {
-          "id": "infra-diagnostic",
-          "name": "🚨 DIAGNÓSTICO DE INFRAESTRUCTURA",
-          "description": "Plugin para descartar errores de renderizado.",
-          "version": "1.0.0",
-          "author": "Antigravity",
-          "presets": [
-            "motion"
-          ],
-          "schema": [
-            {
-              "id": "testText",
-              "type": "string",
-              "label": "Texto de Test",
-              "defaultValue": "INFRAESTRUCTURA OK"
-            }
-          ]
-        },
-        "html": "<div id=\"diag-root\" style=\"width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #ff0000; color: white; font-family: sans-serif;\">\n  <h1 id=\"diag-text\" style=\"font-size: 120px; border: 10px solid white; padding: 40px;\">ESPERANDO JS...</h1>\n</div>",
-        "css": "",
-        "js": "dvEngine.register({\n    awake: (ctx) => {\n        console.log('[DIAG] Awake fired');\n        ctx.refs.text = ctx.root.getElementById('diag-text');\n    },\n    update: (ctx) => {\n        if (ctx.refs.text) {\n            ctx.refs.text.innerText = ctx.props.testText || 'JS WORKING';\n            ctx.refs.text.style.transform = `rotate(${ctx.frame % 360}deg)`;\n        }\n    }\n});"
-      }
-    },
-    {
       "id": "cinematic-opener-pro",
       "name": "Apertura Cinématica Minimalista",
       "description": "Títulos elegantes con efectos de aparición suave, kerning dinámico y transición de salida fluida. 100% Vanilla JS.",
@@ -68,111 +37,6 @@
         "html": "<div id=\"opener-container\" style=\"display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; opacity: 0;\">\n  <div id=\"sub-title\" class=\"dv-label\" style=\"font-size: 13px; color: var(--accent); letter-spacing: 8px; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"main-title\" style=\"color: white; font-size: 82px; font-weight: 900; letter-spacing: 50px; line-height: 1; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"accent-line\" style=\"width: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin-top: 8px; border-radius: 2px;\"></div>\n</div>",
         "css": "",
         "js": "// [v4.1.5] Cinematic Opener — Vanilla JS, Frame-Math determinista\ndvEngine.register({\n    awake: (ctx) => {\n        ctx.refs.container = ctx.root.getElementById('opener-container');\n        ctx.refs.title     = ctx.root.getElementById('main-title');\n        ctx.refs.subtitle  = ctx.root.getElementById('sub-title');\n        ctx.refs.line      = ctx.root.getElementById('accent-line');\n    },\n\n    update: (ctx) => {\n        const { props, refs, timeline, utils } = ctx;\n        const { container, title, subtitle, line } = refs;\n        if (!container || !title || !subtitle || !line) return;\n\n        // 1. Datos Reactivos\n        title.innerText    = props.title    || 'DISEÑO MODULAR';\n        subtitle.innerText = props.subtitle || 'DV-ENGINE SERIES';\n\n        // ─── ENTRADA ────────────────────────────────────────────────\n        const ip = utils.clamp(timeline.introProgress, 0, 1);\n\n        // Kerning: contrae desde 50px → 20px\n        const kerning = utils.lerp(50, 20, utils.easeOutCubic(ip));\n        const spring  = utils.spring(ip, 180, 18);\n\n        container.style.opacity        = ip.toString();\n        title.style.opacity            = ip.toString();\n        title.style.letterSpacing      = `${kerning}px`;\n        title.style.transform          = `translateY(${utils.lerp(40, 0, spring)}px)`;\n\n        // Subtítulo retrasado\n        const subP = utils.clamp((ip - 0.3) / 0.7, 0, 1);\n        subtitle.style.opacity         = subP.toString();\n        subtitle.style.transform       = `translateX(${utils.lerp(-20, 0, utils.easeOutCubic(subP))}px)`;\n\n        // Línea de acento: crece desde el centro\n        const lineP = utils.clamp((ip - 0.4) / 0.6, 0, 1);\n        const lineW = utils.lerp(0, 280, utils.easeOutCubic(lineP));\n        line.style.width = `${lineW}px`;\n\n        // ─── SALIDA ─────────────────────────────────────────────────\n        if (timeline.isOutro) {\n            const op = utils.clamp(timeline.outroProgress, 0, 1);\n            container.style.opacity   = (1 - op).toString();\n            container.style.transform = `scale(${utils.lerp(1, 0.95, utils.easeInOutCubic(op))})`;\n        }\n    }\n});"
-      }
-    },
-    {
-      "id": "dv-html-master",
-      "name": "HTML Master Renderer",
-      "description": "Renderizador profesional de HTML/CSS/JS puro. Diseña animaciones broadcast completas manualmente o con asistencia de IA.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.501Z",
-      "files": {
-        "manifest": {
-          "id": "dv-html-master",
-          "name": "HTML Master Renderer",
-          "description": "Renderizador profesional de HTML/CSS/JS puro. Diseña animaciones broadcast completas manualmente o con asistencia de IA.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": [
-            "branding",
-            "motion",
-            "layout"
-          ],
-          "schema": [
-            {
-              "type": "info",
-              "id": "aiPrompt_full",
-              "label": "Prompt Completo — Animación Nueva",
-              "defaultValue": "Eres un experto Senior en Motion Graphics para broadcast televisivo. Tu misión es generar animaciones deterministas, fluidas y seguras para DVGE v4.1.5.\n\n═══════════════════════════════════════\n📐 REGLAS DE ORO (STOP & READ)\n═══════════════════════════════════════\n\n1. DETERMINISMO ABSOLUTO:\n   ✗ NO USES: setTimeout, setInterval, requestAnimationFrame, Date.now(), Math.random() (sin semilla).\n   ✓ USA: ctx.frame para todo lo que se mueva.\n\n2. ACCESO AL DOM:\n   ✓ USA ctx.awake para capturar elementos via ctx.root.getElementById.\n   ✓ Almacena las referencias en ctx.refs.nombreElemento.\n\n3. ESTADO Y MEMORIA:\n   ✓ USA ctx.state para guardar valores que deban persistir entre frames (ej. posiciones acumuladas).\n   ✗ NO USES variables globales fuera de dvEngine.register.\n\n4. UTILIDADES NATIVAS:\n   ✓ ctx.utils.lerp, clamp, easeOutCubic, easeInOutCubic.\n   ✓ ctx.utils.spring(t, stiffness, damping) -> IMPRESCINDIBLE para movimientos orgánicos.\n   ✓ ctx.timeline.introProgress / outroProgress (0 a 1).\n\n═══════════════════════════════════════\n📦 ESTRUCTURA DE RESPUESTA\n═══════════════════════════════════════\n\nResponde con 3 bloques de código exactos:\n\n```html\n<!-- Estructura semántica, usa IDs únicos -->\n<div id=\"mi-componente\" class=\"dv-safe-area\">...</div>\n```\n\n```css\n/* Usa var(--accent) para el color de marca. */\n#mi-componente { ... }\n```\n\n```js\ndvEngine.register({\n  awake: (ctx) => {\n    // Cache de DOM\n    ctx.refs.el = ctx.root.getElementById('mi-id');\n  },\n  update: (ctx) => {\n    const { frame, utils, timeline, props, refs, state } = ctx;\n    if (!refs.el) return;\n\n    // Animación de entrada (Intro)\n    const ip = utils.clamp(timeline.introProgress, 0, 1);\n    const s = utils.spring(ip, 180, 15);\n    refs.el.style.opacity = ip.toString();\n    refs.el.style.transform = `scale(${s})`;\n    \n    // Lógica personalizada...\n  }\n});\n```\n\n═══════════════════════════════════════\n📝 TAREA ACTUAL:\n═══════════════════════════════════════\n[Describe aquí la animación deseada]"
-            },
-            {
-              "type": "info",
-              "id": "aiPrompt_modify",
-              "label": "Prompt de Modificación — Editar Existente",
-              "defaultValue": "Eres un experto en Motion Graphics para DVGE v4.1.5. Tienes el código de una animación existente en los campos HTML, CSS y JS de este plugin.\n\nTu tarea es MODIFICAR el código existente según la instrucción que te doy a continuación. No reescribas desde cero, solo aplica los cambios necesarios.\n\nReglas:\n  ✓ Mantén la misma estructura de IDs en el HTML\n  ✓ Usa ctx.frame para animaciones (nunca Date.now)\n  ✓ Mantén el dvEngine.register({ awake, update }) intacto\n  ✓ Responde con los 3 bloques completos actualizados (```html ``css ``js`)\n\nMODIFICACIÓN A REALIZAR:\n[Describe aquí qué quieres cambiar: color, tamaño, añadir elemento, cambiar animación, etc.]"
-            },
-            {
-              "type": "select",
-              "id": "canvasPreset",
-              "label": "Formato de Canvas",
-              "defaultValue": "1920x1080",
-              "options": [
-                {
-                  "label": "1920×1080 — Full HD (Broadcast)",
-                  "value": "1920x1080"
-                },
-                {
-                  "label": "1280×720 — HD",
-                  "value": "1280x720"
-                },
-                {
-                  "label": "3840×2160 — 4K UHD",
-                  "value": "3840x2160"
-                }
-              ]
-            },
-            {
-              "type": "select",
-              "id": "animStyle",
-              "label": "Estilo Base de Animación",
-              "defaultValue": "none",
-              "options": [
-                {
-                  "label": "Sin preset (código manual)",
-                  "value": "none"
-                },
-                {
-                  "label": "Fade — Aparición suave",
-                  "value": "fade"
-                },
-                {
-                  "label": "Slide — Deslizamiento lateral",
-                  "value": "slide"
-                },
-                {
-                  "label": "Zoom — Escala desde el centro",
-                  "value": "zoom"
-                },
-                {
-                  "label": "Bounce — Rebote elástico",
-                  "value": "bounce"
-                }
-              ]
-            },
-            {
-              "type": "code",
-              "id": "htmlCode",
-              "label": "Código HTML",
-              "defaultValue": "<div id=\"master-container\" style=\"width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;\">\n  <div id=\"title-block\" style=\"text-align:center;opacity:0;transform:translateY(30px);\">\n    <h1 id=\"main-title\" style=\"color:var(--accent);font-size:96px;font-weight:900;margin:0;letter-spacing:-2px;\">DVGE</h1>\n    <p id=\"sub-title\" class=\"dv-label\" style=\"font-size:18px;letter-spacing:8px;margin-top:12px;\">v4.1.5 — SMART ENGINE</p>\n  </div>\n  <div id=\"accent-bar\" style=\"width:0;height:3px;background:var(--accent);border-radius:2px;\"></div>\n</div>"
-            },
-            {
-              "type": "code",
-              "id": "cssCode",
-              "label": "Código CSS",
-              "defaultValue": "/* Variables disponibles: var(--accent)\n   Clases: .dv-glass, .dv-label, .dv-safe-area\n   Canvas: siempre 1920×1080 */\n\n#master-container {\n  font-family: 'Inter', -apple-system, sans-serif;\n}"
-            },
-            {
-              "type": "code",
-              "id": "jsCode",
-              "label": "Código JS",
-              "defaultValue": "dvEngine.register({\n  awake: (ctx) => {\n    ctx.refs.block  = ctx.root.getElementById('title-block');\n    ctx.refs.bar    = ctx.root.getElementById('accent-bar');\n  },\n  update: (ctx) => {\n    const { refs, timeline, utils } = ctx;\n    const { block, bar } = refs;\n    if (!block || !bar) return;\n\n    // ─── ENTRADA ───────────────────────────────────\n    const ip = utils.clamp(timeline.introProgress, 0, 1);\n    block.style.opacity   = ip.toString();\n    block.style.transform = `translateY(${utils.lerp(30, 0, utils.easeOutCubic(ip))}px)`;\n\n    const barP = utils.clamp((ip - 0.3) / 0.7, 0, 1);\n    bar.style.width = `${utils.lerp(0, 300, utils.easeOutCubic(barP))}px`;\n\n    // ─── SALIDA ────────────────────────────────────\n    if (timeline.isOutro) {\n      const op = utils.clamp(timeline.outroProgress, 0, 1);\n      block.style.opacity = (1 - op).toString();\n      bar.style.width     = `${utils.lerp(300, 0, utils.easeInOutCubic(op))}px`;\n    }\n  }\n});"
-            }
-          ]
-        },
-        "html": "<div id=\"master-root\">\n    <style id=\"master-dynamic-style\"></style>\n    <div id=\"master-render-pane\"></div>\n</div>",
-        "css": "",
-        "js": "// [v4.2.0] HTML Master Renderer — Motor Profesional con Aislamiento y Debug Visual\nconst CANVAS_SIZES = { '1920x1080': [1920, 1080], '1280x720': [1280, 720], '3840x2160': [3840, 2160] };\nconst BASE_ANIMS = {\n    fade: (el, ip, op, isOutro) => el.style.opacity = isOutro ? (1-op) : ip,\n    slide: (el, ip, op, isOutro, utils) => {\n        el.style.opacity = isOutro ? (1-op) : ip;\n        el.style.transform = isOutro ? `translateX(${utils.lerp(0, -80, utils.easeInOutCubic(op))}px)` : `translateX(${utils.lerp(80, 0, utils.easeOutCubic(ip))}px)`;\n    },\n    zoom: (el, ip, op, isOutro, utils) => {\n        el.style.opacity = isOutro ? (1-op) : ip;\n        el.style.transform = isOutro ? `scale(${utils.lerp(1, 0.9, utils.easeInOutCubic(op))})` : `scale(${utils.lerp(0.9, 1, utils.easeOutCubic(ip))})`;\n    }\n};\n\ndvEngine.register({\n    awake: (ctx) => {\n        ctx.refs.root = ctx.root.getElementById('master-root');\n        ctx.refs.style = ctx.root.getElementById('master-dynamic-style');\n        ctx.refs.pane = ctx.root.getElementById('master-render-pane');\n        ctx._lastJs = null; ctx._injectedFn = null; ctx._childCtx = null;\n    },\n    update: (ctx) => {\n        const { props, refs, timeline, utils } = ctx;\n        if (!refs.pane || !refs.style || !refs.root) return;\n\n        // 1. Setup Entorno\n        const [w, h] = CANVAS_SIZES[props.canvasPreset] || [1920, 1080];\n        refs.root.style.width = `${w}px`; refs.root.style.height = `${h}px`;\n        refs.root.style.setProperty('--accent', props.brandPrimaryColor || '#E44C30');\n\n        // 2. Sincronización Assets\n        if (ctx._lastHtml !== props.htmlCode) {\n            refs.pane.innerHTML = props.htmlCode || '';\n            ctx._lastHtml = props.htmlCode; ctx._injectedFn = null; ctx._lastJs = null;\n        }\n        if (ctx._lastCss !== props.cssCode) {\n            refs.style.textContent = props.cssCode || '';\n            ctx._lastCss = props.cssCode;\n        }\n\n        // 3. Gestión de JS Dinámico\n        const currentJs = (props.jsCode || '').trim();\n        if (currentJs && ctx._lastJs !== currentJs) {\n            ctx._lastJs = currentJs;\n            try {\n                if (ctx._injectedFn && ctx._injectedFn.destroy) ctx._injectedFn.destroy(ctx._childCtx);\n\n                // [v4.2.0] Parameter Injection & Visual Debugging\n                const fn = new Function('__dvEngine__', 'ctx', \n                    '\"use strict\";' + \n                    'const dvEngine = __dvEngine__;' + \n                    'const window = undefined; const document = undefined; const process = undefined; ' + \n                    'const setTimeout = undefined; const setInterval = undefined; ' + \n                    currentJs\n                );\n                const miniEngine = { _reg: null, register(d) { this._reg = d; } };\n                const childCtx = { ...ctx, refs: {}, state: {}, parent: ctx };\n                fn(miniEngine, childCtx);\n                if (miniEngine._reg) {\n                    ctx._injectedFn = miniEngine._reg;\n                    if (ctx._injectedFn.awake) ctx._injectedFn.awake(childCtx);\n                    ctx._childCtx = childCtx;\n                }\n            } catch(e) { \n                console.error('[HTML Master] JS Error:', e.message);\n                refs.pane.innerHTML = `<div style=\"color: #ff4444; background: rgba(0,0,0,0.8); padding: 20px; border: 1px solid #ff4444; border-radius: 8px; font-family: monospace; font-size: 13px;\">\\n                    <strong style=\"display: block; margin-bottom: 8px; font-size: 16px;\">⚠️ Plugin Error</strong>\\n                    <code>${e.message}</code>\\n                </div>`;\n            }\n        }\n\n        // 4. Ejecución\n        if (ctx._injectedFn && ctx._injectedFn.update) {\n            try { ctx._injectedFn.update(ctx._childCtx || ctx); }\n            catch(e) { \n                if (!ctx._errorLogged) { console.warn('[HTML Master] Runtime Error:', e.message); ctx._errorLogged = true; }\n            }\n        } else {\n            const style_ = props.animStyle || 'none';\n            const ip = utils.clamp(timeline.introProgress, 0, 1);\n            const op = utils.clamp(timeline.outroProgress, 0, 1);\n            if (BASE_ANIMS[style_]) BASE_ANIMS[style_](refs.pane, ip, op, timeline.isOutro, utils);\n        }\n    }\n});"
       }
     },
     {
@@ -440,6 +304,51 @@
         "html": "<div id=\"social-card\" class=\"dv-glass\" style=\"display: flex; align-items: center; padding: 10px 20px; gap: 15px; min-width: 250px; opacity: 0; transform: scale(0.8);\">\r\n  <div id=\"icon-container\" style=\"width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--accent); border-radius: 8px;\">\r\n    <!-- Icono inyectado por JS -->\r\n    <svg id=\"social-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></svg>\r\n  </div>\r\n  <div style=\"display: flex; flexDirection: column;\">\r\n    <span id=\"platform-name\" class=\"dv-label\" style=\"font-size: 10px; margin-bottom: 2px;\">PLATAFORMA</span>\r\n    <span id=\"user-display\" style=\"color: white; font-weight: bold; font-size: 18px;\">@usuario</span>\r\n  </div>\r\n</div>",
         "css": "#social-card {\r\n    border-left: 4px solid var(--accent);\r\n    box-shadow: 0 8px 32px rgba(0,0,0,0.3);\r\n}\r\n\r\n#icon-container svg {\r\n    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\r\n}\r\n\r\n#user-display {\r\n    text-shadow: 0 2px 4px rgba(0,0,0,0.3);\r\n}",
         "js": "// [v4.1.5] Social Cards Pro — Frame-Math determinista, sin dependencia de GSAP\nconst ICONS = {\n    instagram: '<rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"5\" ry=\"5\"></rect><path d=\"M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z\"></path><line x1=\"17.5\" y1=\"6.5\" x2=\"17.51\" y2=\"6.5\"></line>',\n    twitter:   '<path d=\"M4 4l11.733 16H20L8.267 4zM4 20l6.768-6.768M15.5 4l-6.268 6.768\"/>',\n    youtube:   '<path d=\"M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z\"></path><polygon points=\"9.75 15.02 15.5 12 9.75 8.98 9.75 15.02\"></polygon>',\n    twitch:    '<path d=\"M21 2H3v16h5v4l4-4h5l4-4V2zm-2 13h-4l-3 3v-3H5V4h14v11z\"></path><path d=\"M16 7h-2v4h2V7zm-4 0h-2v4h2V7z\"></path>'\n};\n\ndvEngine.register({\n    awake: (ctx) => {\n        ctx.refs.card     = ctx.root.getElementById('social-card');\n        ctx.refs.icon     = ctx.root.getElementById('social-icon');\n        ctx.refs.platform = ctx.root.getElementById('platform-name');\n        ctx.refs.user     = ctx.root.getElementById('user-display');\n    },\n\n    update: (ctx) => {\n        const { props, refs, timeline, utils } = ctx;\n        const { card, icon, platform, user } = refs;\n        if (!card) return;\n\n        // 1. Datos Reactivos\n        if (user)     user.innerText     = props.username || '@usuario_pro';\n        if (platform) platform.innerText = (props.platform || 'instagram').toUpperCase();\n        if (icon)     icon.innerHTML     = ICONS[props.platform] || ICONS.instagram;\n\n        // 2. Entrada — Bounce via spring, sin GSAP\n        const ip = utils.clamp(timeline.introProgress, 0, 1);\n        const bounce = utils.spring(ip, 300, 15);  // stiffness alta = rebote\n        card.style.opacity   = ip.toString();\n        card.style.transform = `scale(${utils.lerp(0.6, 1, bounce)}) translateY(${utils.lerp(20, 0, utils.easeOutCubic(ip))}px)`;\n\n        // 3. Salida — desliza hacia la derecha\n        if (timeline.isOutro) {\n            const op = utils.clamp(timeline.outroProgress, 0, 1);\n            card.style.opacity   = (1 - op).toString();\n            card.style.transform = `translateX(${utils.lerp(0, 60, utils.easeInOutCubic(op))}px)`;\n        }\n    }\n});"
+      }
+    },
+    {
+      "id": "dv-studio-master",
+      "name": "DVGE Studio Master",
+      "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
+      "version": "5.4.0",
+      "author": "Jonatan Barón & Antigravity",
+      "updatedAt": "2026-04-23T18:51:40.000Z",
+      "files": {
+        "manifest": {
+          "id": "dv-studio-master",
+          "name": "DVGE Studio Master",
+          "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
+          "version": "5.4.0",
+          "author": "Jonatan Barón & Antigravity",
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
+          "schema": [
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\">\n  <h1 id=\"studio-title\">DVGE STUDIO</h1>\n  <div id=\"studio-bar\"></div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#studio-root {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n}\n\n#studio-title {\n  color: var(--accent);\n  font-size: 80px;\n  font-weight: 900;\n  margin: 0;\n}\n\n#studio-bar {\n  width: 200px;\n  height: 4px;\n  background: white;\n  margin-top: 10px;\n}"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JavaScript (Smart API)",
+              "defaultValue": "// No necesitas dvEngine.register, solo define la animación:\nwindow.renderDVGE = (frame, props, ctx) => {\n  const title = ctx.root.getElementById('studio-title');\n  const bar = ctx.root.getElementById('studio-bar');\n  if (!title || !bar) return;\n\n  const ip = ctx.timeline.introProgress;\n  title.style.opacity = ip;\n  title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`;\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\">\n    <style id=\"dv-master-styles\"></style>\n    <div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div>\n</div>",
+        "css": "#dv-master-host {\n    width: 100%;\n    height: 100%;\n    background: transparent;\n    will-change: transform;\n    contain: paint;\n}\n#dv-master-canvas {\n    transform-origin: top left;\n}\n:root {\n    --accent: #E44C30;\n}",
+        "js": "let lastHtml = null; let lastCss = null; let lastJs = null; let injectedFn = null; let childCtx = null;\n\nwindow.renderDVGE = (frame, props, ctx) => {\n    const canvas = ctx.root.getElementById('dv-master-canvas');\n    const styleTag = ctx.root.getElementById('dv-master-styles');\n    if (!canvas || !styleTag) return;\n\n    if (lastHtml !== props.htmlCode) {\n        canvas.innerHTML = props.htmlCode || '';\n        lastHtml = props.htmlCode; injectedFn = null; lastJs = null;\n    }\n\n    if (lastCss !== props.cssCode) {\n        styleTag.textContent = props.cssCode || '';\n        lastCss = props.cssCode;\n    }\n\n    const currentJs = (props.jsCode || '').trim();\n    if (currentJs && lastJs !== currentJs) {\n        lastJs = currentJs;\n        try {\n            delete window._tempRender;\n            const sandboxCode = `\"use strict\"; ${currentJs} \\n if (window.renderDVGE) { window._tempRender = window.renderDVGE; }`;\n            const fn = new Function('ctx', sandboxCode);\n            fn(ctx);\n            if (window._tempRender) {\n                injectedFn = window._tempRender;\n                childCtx = { ...ctx, state: {}, refs: {}, parent: ctx };\n            }\n        } catch (e) {\n            console.error('[Studio Master] JS Error:', e.message);\n        }\n    }\n\n    if (injectedFn) {\n        try {\n            childCtx.frame = frame;\n            childCtx.props = props;\n            childCtx.timeline = ctx.timeline;\n            injectedFn(frame, props, childCtx);\n        } catch (e) {}\n    }\n};"
       }
     }
   ]
