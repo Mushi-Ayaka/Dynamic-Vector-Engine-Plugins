@@ -154,9 +154,9 @@
       "id": "dv-studio-master",
       "name": "DVGE Studio Master",
       "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
-      "version": "5.4.0",
+      "version": "5.5.0",
       "author": "Jonatan Barón & Antigravity",
-      "updatedAt": "2026-04-23T18:57:00.000Z",
+      "updatedAt": "2026-04-23T19:13:00.000Z",
       "files": {
         "manifest": {
           "id": "dv-studio-master",
@@ -166,6 +166,7 @@
           "author": "Jonatan Barón & Antigravity",
           "presets": ["branding", "motion", "layout"],
           "schema": [
+            { "id": "promptHelper", "type": "prompt", "label": "Knowledge Bridge", "defaultValue": "DRAG TO AI" },
             { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>" },
             { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }" },
             { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" }
