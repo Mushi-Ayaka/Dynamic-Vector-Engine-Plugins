@@ -1,93 +1,78 @@
 /**
- * [v5.4.0] Studio Master - Reactive Engine Bridge
- * Sincronización de alta fidelidad entre el motor core y el código de usuario.
+ * [v5.4.0] Studio Master - Corrected Reactive Bridge
+ * Separamos el registro del plugin de la función global del usuario.
  */
 
-let lastHtml = null;
-let lastCss = null;
-let lastJs = null;
-let injectedFn = null;
-let childCtx = null;
+dvEngine.register({
+    awake: (ctx) => {
+        ctx.state.lastHtml = null;
+        ctx.state.lastCss = null;
+        ctx.state.lastJs = null;
+        ctx.state.injectedFn = null;
+        ctx.state.childCtx = null;
+        
+        ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas');
+        ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles');
+    },
 
-window.renderDVGE = (frame, props, ctx) => {
-    const canvas = ctx.root.getElementById('dv-master-canvas');
-    const styleTag = ctx.root.getElementById('dv-master-styles');
-    if (!canvas || !styleTag) return;
+    update: (ctx) => {
+        const { props, refs, state, frame } = ctx;
+        const { canvas, styleTag } = refs;
+        if (!canvas || !styleTag) return;
 
-    // 1. Sincronización de Estructura (HTML)
-    if (lastHtml !== props.htmlCode) {
-        canvas.innerHTML = props.htmlCode || '';
-        lastHtml = props.htmlCode;
-        // Al cambiar el HTML, forzamos la reinyección del JS
-        injectedFn = null; 
-        lastJs = null;
-    }
+        // 1. Sincronización HTML
+        if (state.lastHtml !== props.htmlCode) {
+            canvas.innerHTML = props.htmlCode || '';
+            state.lastHtml = props.htmlCode;
+            state.injectedFn = null;
+            state.lastJs = null;
+        }
 
-    // 2. Sincronización de Estilo (CSS)
-    if (lastCss !== props.cssCode) {
-        styleTag.textContent = props.cssCode || '';
-        lastCss = props.cssCode;
-    }
+        // 2. Sincronización CSS
+        if (state.lastCss !== props.cssCode) {
+            styleTag.textContent = props.cssCode || '';
+            state.lastCss = props.cssCode;
+        }
 
-    // 3. Sincronización de Lógica (JS)
-    const currentJs = (props.jsCode || '').trim();
-    if (currentJs && lastJs !== currentJs) {
-        lastJs = currentJs;
-        try {
-            // Limpieza de referencias previas
-            delete window._tempRender;
-            
-            /**
-             * [v5.4.0] Smart Sandbox:
-             * Envolvemos el código del usuario en un entorno que busca window.renderDVGE
-             */
-            const sandboxCode = `
-                "use strict";
-                ${currentJs}
-                if (window.renderDVGE) {
-                    window._tempRender = window.renderDVGE;
+        // 3. Inyección de JS (Capturando window.renderDVGE del usuario)
+        const currentJs = (props.jsCode || '').trim();
+        if (currentJs && state.lastJs !== currentJs) {
+            state.lastJs = currentJs;
+            try {
+                // Creamos un sandbox limpio para buscar la función del usuario
+                const sandbox = { renderDVGE: null };
+                const sandboxCode = `
+                    (function(sandbox, ctx) {
+                        "use strict";
+                        const window = { renderDVGE: null };
+                        const dvEngine = { register: () => {} }; // Mock
+                        ${currentJs}
+                        sandbox.renderDVGE = window.renderDVGE;
+                    })(arguments[0], arguments[1])
+                `;
+                
+                const fn = new Function(sandboxCode);
+                fn(sandbox, ctx);
+                
+                if (sandbox.renderDVGE) {
+                    state.injectedFn = sandbox.renderDVGE;
+                    state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx };
                 }
-            `;
-            
-            // Ejecución segura
-            const fn = new Function('ctx', sandboxCode);
-            fn(ctx);
-            
-            if (window._tempRender) {
-                injectedFn = window._tempRender;
-                // Inicializamos el objeto de estado persistente del usuario si no existe
-                childCtx = { 
-                    ...ctx, 
-                    state: {}, 
-                    refs: {},
-                    parent: ctx
-                };
+            } catch (e) {
+                console.error('[Studio Master] JS Error:', e.message);
             }
-        } catch (e) {
-            console.error('[Studio Master] JS Error:', e.message);
-            canvas.innerHTML = `<div class="dv-glass" style="padding:20px; color:#ff4444; border:1px solid #ff4444;">
-                <strong>JS Compile Error:</strong><br>${e.message}
-            </div>`;
         }
-    }
 
-    // 4. Loop de Ejecución (Sincronización Atómica)
-    if (injectedFn) {
-        try {
-            /**
-             * [DETECTIVE-FIX]: Actualizamos el contexto hijo con los valores 
-             * más frescos del motor padre antes de cada llamada.
-             */
-            childCtx.frame = frame;
-            childCtx.props = props;
-            childCtx.timeline = ctx.timeline;
-            
-            injectedFn(frame, props, childCtx);
-        } catch (e) {
-            if (!ctx._errorLogged) {
-                console.warn('[Studio Master] Runtime Error:', e.message);
-                ctx._errorLogged = true;
+        // 4. Ejecución del renderizado del usuario
+        if (state.injectedFn) {
+            try {
+                state.childCtx.frame = frame;
+                state.childCtx.props = props;
+                state.childCtx.timeline = ctx.timeline;
+                state.injectedFn(frame, props, state.childCtx);
+            } catch (e) {
+                // Silenciamos errores de runtime para evitar spam en consola
             }
         }
     }
-};
+});
