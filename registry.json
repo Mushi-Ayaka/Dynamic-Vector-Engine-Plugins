@@ -52,124 +52,25 @@
       }
     },
     {
-      "id": "lower-third-basic",
-      "name": "Lower Third (Basic)",
-      "description": "Banda de texto clásica optimizada para Broadcast.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.502Z",
-      "files": {
-        "manifest": {
-          "id": "lower-third-basic",
-          "name": "Lower Third (Basic)",
-          "description": "Banda de texto clásica.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
-          "schema": [
-            { "id": "title", "type": "string", "label": "Nombre", "defaultValue": "Ana García" },
-            { "id": "subtitle", "type": "string", "label": "Cargo", "defaultValue": "Directora de Producto" }
-          ]
-        },
-        "html": "<div id=\"plugin-container\"><div id=\"glow-bg\" class=\"dv-glass\"></div><div id=\"accent-line\"></div><div id=\"content-body\"><div id=\"title-text\"></div><div id=\"subtitle-text\"></div></div></div>",
-        "css": "#plugin-container { position: absolute; bottom: var(--dv-safe-bottom, 150px); left: var(--dv-safe-left, 150px); min-width: 600px; display: flex; flex-direction: column; padding: 24px 45px; border-radius: 6px; overflow: hidden; font-family: sans-serif; } #glow-bg { position: absolute; inset: 0; z-index: -1; background: rgba(0,0,0,0.4); } #accent-line { height: 6px; border-radius: 3px; margin-bottom: 8px; background-color: var(--accent); transform-origin: left; } #title-text { font-size: 64px; font-weight: 800; color: white; } #subtitle-text { font-size: 32px; color: rgba(255,255,255,0.75); }",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.line = ctx.root.getElementById('accent-line'); ctx.refs.title = ctx.root.getElementById('title-text'); ctx.refs.subtitle = ctx.root.getElementById('subtitle-text'); ctx.refs.cont = ctx.root.getElementById('plugin-container'); }, update: (ctx) => { const { props, refs, timeline, utils } = ctx; refs.title.innerText = props.title || ''; refs.subtitle.innerText = props.subtitle || ''; const ip = utils.clamp(timeline.introProgress, 0, 1); refs.line.style.transform = `scaleX(${utils.easeOutCubic(ip)})`; refs.cont.style.opacity = ip.toString(); if (timeline.isOutro) { const op = utils.clamp(timeline.outroProgress, 0, 1); refs.cont.style.opacity = (1-op).toString(); } } });"
-      }
-    },
-    {
-      "id": "news-ticker-pro",
-      "name": "Cinta de Noticias Dinámica",
-      "description": "Cinta de noticias con desplazamiento horizontal suave.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.503Z",
-      "files": {
-        "manifest": {
-          "id": "news-ticker-pro",
-          "name": "Cinta de Noticias Dinámica",
-          "description": "Crawl de noticias.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
-          "schema": [
-            { "id": "tickerText", "type": "string", "label": "Texto", "defaultValue": "NOTICIA DE ÚLTIMA HORA: DVGE v5.4.0 GA ya disponible." },
-            { "id": "scrollSpeed", "type": "number", "label": "Velocidad", "defaultValue": 4 }
-          ]
-        },
-        "html": "<div id=\"ticker-container\" class=\"dv-glass\" style=\"width: 100vw; height: 50px; display: flex; align-items: center; overflow: hidden; border-bottom: 2px solid var(--accent);\"><div id=\"ticker-track\" style=\"display: flex; white-space: nowrap; padding-left: 20px;\"><span id=\"ticker-text\" style=\"color: white; font-size: 20px;\"></span><span id=\"ticker-text-copy\" style=\"color: white; font-size: 20px; margin-left: 50px;\"></span></div></div>",
-        "css": "",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.track = ctx.root.getElementById('ticker-track'); ctx.refs.t1 = ctx.root.getElementById('ticker-text'); ctx.refs.t2 = ctx.root.getElementById('ticker-text-copy'); }, update: (ctx) => { const { frame, props, refs } = ctx; const text = props.tickerText || ''; if (refs.t1.innerText !== text) { refs.t1.innerText = text; refs.t2.innerText = text; } const speed = props.scrollSpeed || 4; const x = -((frame * speed) % (refs.t1.offsetWidth + 50)); refs.track.style.transform = `translateX(${x}px)`; } });"
-      }
-    },
-    {
-      "id": "scoreboard-pro",
-      "name": "Marcador Deportivo Elite",
-      "description": "Panel de marcador superior deportivo.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.503Z",
-      "files": {
-        "manifest": {
-          "id": "scoreboard-pro",
-          "name": "Marcador Deportivo Elite",
-          "description": "Scoreboard Elite.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
-          "schema": [
-            { "id": "teamA", "type": "string", "label": "Local", "defaultValue": "TEAM A" },
-            { "id": "scoreA", "type": "number", "label": "Puntos A", "defaultValue": 0 }
-          ]
-        },
-        "html": "<div id=\"scoreboard\" class=\"dv-glass\" style=\"display: flex; height: 50px; min-width: 450px; border-radius: 4px; background: rgba(0,0,0,0.5);\"><div style=\"flex: 1; display: flex; align-items: center; justify-content: center; color: white;\" id=\"t-a\"></div><div style=\"width: 60px; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900;\" id=\"s-a\">0</div></div>",
-        "css": "",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.teamA = ctx.root.getElementById('t-a'); ctx.refs.scoreA = ctx.root.getElementById('s-a'); }, update: (ctx) => { ctx.refs.teamA.innerText = ctx.props.teamA || 'TEAM A'; ctx.refs.scoreA.innerText = ctx.props.scoreA ?? 0; } });"
-      }
-    },
-    {
-      "id": "social-cards-pro",
-      "name": "Tarjetas de Redes Sociales Pro",
-      "description": "Tarjetas con efecto bounce para perfiles sociales.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.504Z",
-      "files": {
-        "manifest": {
-          "id": "social-cards-pro",
-          "name": "Tarjetas de Redes Sociales Pro",
-          "description": "Social Cards.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
-          "schema": [
-            { "id": "username", "type": "string", "label": "Usuario", "defaultValue": "@usuario_pro" }
-          ]
-        },
-        "html": "<div id=\"social-card\" class=\"dv-glass\" style=\"display: flex; align-items: center; padding: 10px 20px; border-left: 4px solid var(--accent);\"><span id=\"u-display\" style=\"color: white; font-weight: bold;\"></span></div>",
-        "css": "",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.u = ctx.root.getElementById('u-display'); ctx.refs.c = ctx.root.getElementById('social-card'); }, update: (ctx) => { ctx.refs.u.innerText = ctx.props.username || ''; const ip = ctx.utils.clamp(ctx.timeline.introProgress, 0, 1); ctx.refs.c.style.opacity = ip.toString(); } });"
-      }
-    },
-    {
       "id": "dv-studio-master",
       "name": "DVGE Studio Master",
       "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
-      "version": "5.5.0",
+      "version": "5.7.0",
       "author": "Jonatan Barón & Antigravity",
-      "updatedAt": "2026-04-23T19:13:00.000Z",
+      "updatedAt": "2026-04-29T08:58:00.000Z",
       "files": {
         "manifest": {
           "id": "dv-studio-master",
           "name": "DVGE Studio Master",
           "description": "Renderizador de código profesional.",
-          "version": "5.4.0",
+          "version": "5.7.0",
           "author": "Jonatan Barón & Antigravity",
           "presets": ["branding", "motion", "layout"],
           "schema": [
-            { "id": "promptHelper", "type": "prompt", "label": "Knowledge Bridge", "defaultValue": "DRAG TO AI" },
             { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>" },
             { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" }
+            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" },
+            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "# DVGE MASTER RULES\nEres un experto en animaciones para el Dynamic Vector Graphics Engine (DVGE).\n\n## TU MISIÓN\nGenerar código HTML/CSS/JS optimizado para broadcast.\n\n## REGLAS DE ORO\n1. Usa siempre las variables proporcionadas en el contexto de proyecto.\n2. Los artefactos deben ser llamados mediante getArtifact(ID).\n3. Prioriza el rendimiento: usa transform y opacity para animaciones.\n4. Mantén el estilo 'Luxury Broadcast' (minimalista, movimientos fluidos)." }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
