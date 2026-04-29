@@ -14,10 +14,24 @@
           "description": "Títulos elegantes con efectos de aparición suave, kerning dinámico y transición de salida fluida. 100% Vanilla JS.",
           "version": "4.1.5",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
           "schema": [
-            { "id": "title", "type": "string", "label": "Título Principal", "defaultValue": "DISEÑO MODULAR" },
-            { "id": "subtitle", "type": "string", "label": "Subtítulo / Serie", "defaultValue": "DV-ENGINE SERIES" }
+            {
+              "id": "title",
+              "type": "string",
+              "label": "Título Principal",
+              "defaultValue": "DISEÑO MODULAR"
+            },
+            {
+              "id": "subtitle",
+              "type": "string",
+              "label": "Subtítulo / Serie",
+              "defaultValue": "DV-ENGINE SERIES"
+            }
           ]
         },
         "html": "<div id=\"opener-container\" style=\"display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; opacity: 0;\">\n  <div id=\"sub-title\" class=\"dv-label\" style=\"font-size: 13px; color: var(--accent); letter-spacing: 8px; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"main-title\" style=\"color: white; font-size: 82px; font-weight: 900; letter-spacing: 50px; line-height: 1; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"accent-line\" style=\"width: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin-top: 8px; border-radius: 2px;\"></div>\n</div>",
@@ -39,11 +53,40 @@
           "description": "Información en vivo de hora y temperatura para esquinas de pantalla.",
           "version": "4.1.5",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
           "schema": [
-            { "id": "location", "type": "string", "label": "Ubicación", "defaultValue": "MADRID, ES" },
-            { "id": "temp", "type": "string", "label": "Temperatura", "defaultValue": "22°C" },
-            { "id": "weatherIcon", "type": "select", "label": "Clima", "defaultValue": "sunny", "options": [{ "label": "☀️ Soleado", "value": "sunny" }, { "label": "☁️ Nublado", "value": "cloudy" }] }
+            {
+              "id": "location",
+              "type": "string",
+              "label": "Ubicación",
+              "defaultValue": "MADRID, ES"
+            },
+            {
+              "id": "temp",
+              "type": "string",
+              "label": "Temperatura",
+              "defaultValue": "22°C"
+            },
+            {
+              "id": "weatherIcon",
+              "type": "select",
+              "label": "Clima",
+              "defaultValue": "sunny",
+              "options": [
+                {
+                  "label": "☀️ Soleado",
+                  "value": "sunny"
+                },
+                {
+                  "label": "☁️ Nublado",
+                  "value": "cloudy"
+                }
+              ]
+            }
           ]
         },
         "html": "<div id=\"info-widget\" class=\"dv-glass\" style=\"display: inline-flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 8px; border-left: 3px solid var(--accent);\"><div id=\"weather-icon\" style=\"font-size: 22px; line-height: 1;\">☀️</div><div style=\"display: flex; flex-direction: column; gap: 2px;\"><div id=\"current-time\" style=\"color: white; font-size: 26px; font-weight: 800; letter-spacing: 2px; line-height: 1;\">00:00</div><div style=\"display: flex; gap: 8px; align-items: center;\"><span id=\"current-location\" class=\"dv-label\" style=\"font-size: 11px; letter-spacing: 1px;\"></span><span style=\"color: rgba(255,255,255,0.3); font-size: 10px;\">•</span><span id=\"current-temp\" style=\"color: var(--accent); font-size: 13px; font-weight: 700;\"></span></div></div></div>",
@@ -65,12 +108,36 @@
           "description": "Renderizador de código profesional.",
           "version": "5.7.0",
           "author": "Jonatan Barón & Antigravity",
-          "presets": ["branding", "motion", "layout"],
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
           "schema": [
-            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>" },
-            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" },
-            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "# DVGE MASTER RULES\nEres un experto en animaciones para el Dynamic Vector Graphics Engine (DVGE).\n\n## TU MISIÓN\nGenerar código HTML/CSS/JS optimizado para broadcast.\n\n## REGLAS DE ORO\n1. Usa siempre las variables proporcionadas en el contexto de proyecto.\n2. Los artefactos deben ser llamados mediante getArtifact(ID).\n3. Prioriza el rendimiento: usa transform y opacity para animaciones.\n4. Mantén el estilo 'Luxury Broadcast' (minimalista, movimientos fluidos)." }
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "Reglas"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };"
+            }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
