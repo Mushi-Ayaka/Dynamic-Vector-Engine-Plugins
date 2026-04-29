@@ -1,10 +1,14 @@
 {
   "id": "dv-studio-master",
   "name": "DVGE Studio Master",
-  "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
-  "version": "5.4.0",
+  "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames.",
+  "version": "5.7.0",
   "author": "Jonatan Barón & Antigravity",
-  "presets": ["branding", "motion", "layout"],
+  "presets": [
+    "branding",
+    "motion",
+    "layout"
+  ],
   "schema": [
     {
       "id": "htmlCode",
@@ -27,7 +31,8 @@
     {
       "id": "masterRules",
       "type": "prompt",
-      "label": "Contexto para IA",      "defaultValue": "# DVGE MASTER RULES\nEres un experto en animaciones para el Dynamic Vector Graphics Engine (DVGE).\n\n## TU MISIÓN\nGenerar código HTML/CSS/JS optimizado para broadcast.\n\n## REGLAS DE ORO\n1. Usa siempre las variables proporcionadas en el contexto de proyecto.\n2. Los artefactos deben ser llamados mediante getArtifact(ID).\n3. Prioriza el rendimiento: usa transform y opacity para animaciones.\n4. Mantén el estilo 'Luxury Broadcast' (minimalista, movimientos fluidos)."
+      "label": "🧠 Generar Contexto para IA",
+      "defaultValue": "# DVGE MASTER RULES\nEres un experto en animaciones para el Dynamic Vector Graphics Engine (DVGE).\n\n## TU MISIÓN\nGenerar código HTML/CSS/JS optimizado para broadcast.\n\n## REGLAS DE ORO\n1. Usa siempre las variables proporcionadas en el contexto de proyecto.\n2. Los artefactos deben ser llamados mediante getArtifact(ID).\n3. Prioriza el rendimiento: usa transform y opacity para animaciones.\n4. Mantén el estilo 'Luxury Broadcast' (minimalista, movimientos fluidos)."
     }
   ]
 }
