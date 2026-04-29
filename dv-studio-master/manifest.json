@@ -23,6 +23,11 @@
       "type": "code",
       "label": "Lógica JavaScript (Smart API)",
       "defaultValue": "// No necesitas dvEngine.register, solo define la animación:\nwindow.renderDVGE = (frame, props, ctx) => {\n  const title = ctx.root.getElementById('studio-title');\n  const bar = ctx.root.getElementById('studio-bar');\n  if (!title || !bar) return;\n\n  const ip = ctx.timeline.introProgress;\n  title.style.opacity = ip;\n  title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`;\n};"
+    },
+    {
+      "id": "masterRules",
+      "type": "prompt",
+      "label": "Contexto para IA",      "defaultValue": "# DVGE MASTER RULES\nEres un experto en animaciones para el Dynamic Vector Graphics Engine (DVGE).\n\n## TU MISIÓN\nGenerar código HTML/CSS/JS optimizado para broadcast.\n\n## REGLAS DE ORO\n1. Usa siempre las variables proporcionadas en el contexto de proyecto.\n2. Los artefactos deben ser llamados mediante getArtifact(ID).\n3. Prioriza el rendimiento: usa transform y opacity para animaciones.\n4. Mantén el estilo 'Luxury Broadcast' (minimalista, movimientos fluidos)."
     }
   ]
 }
