@@ -1,143 +1,106 @@
 {
   "plugins": [
     {
-      "id": "cinematic-opener-pro",
-      "name": "Apertura Cinématica Minimalista",
-      "description": "Títulos elegantes con efectos de aparición suave, kerning dinámico y transición de salida fluida. 100% Vanilla JS.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.497Z",
-      "files": {
-        "manifest": {
-          "id": "cinematic-opener-pro",
-          "name": "Apertura Cinématica Minimalista",
-          "description": "Títulos elegantes con efectos de aparición suave, kerning dinámico y transición de salida fluida. 100% Vanilla JS.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": [
-            "branding",
-            "motion",
-            "layout"
-          ],
-          "schema": [
-            {
-              "id": "title",
-              "type": "string",
-              "label": "Título Principal",
-              "defaultValue": "DISEÑO MODULAR"
-            },
-            {
-              "id": "subtitle",
-              "type": "string",
-              "label": "Subtítulo / Serie",
-              "defaultValue": "DV-ENGINE SERIES"
-            }
-          ]
-        },
-        "html": "<div id=\"opener-container\" style=\"display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; opacity: 0;\">\n  <div id=\"sub-title\" class=\"dv-label\" style=\"font-size: 13px; color: var(--accent); letter-spacing: 8px; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"main-title\" style=\"color: white; font-size: 82px; font-weight: 900; letter-spacing: 50px; line-height: 1; text-transform: uppercase; opacity: 0;\"></div>\n  <div id=\"accent-line\" style=\"width: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin-top: 8px; border-radius: 2px;\"></div>\n</div>",
-        "css": "",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.container = ctx.root.getElementById('opener-container'); ctx.refs.title = ctx.root.getElementById('main-title'); ctx.refs.subtitle = ctx.root.getElementById('sub-title'); ctx.refs.line = ctx.root.getElementById('accent-line'); }, update: (ctx) => { const { props, refs, timeline, utils } = ctx; const { container, title, subtitle, line } = refs; if (!container || !title || !subtitle || !line) return; title.innerText = props.title || 'DISEÑO MODULAR'; subtitle.innerText = props.subtitle || 'DV-ENGINE SERIES'; const ip = utils.clamp(timeline.introProgress, 0, 1); const kerning = utils.lerp(50, 20, utils.easeOutCubic(ip)); const spring = utils.spring(ip, 180, 18); container.style.opacity = ip.toString(); title.style.opacity = ip.toString(); title.style.letterSpacing = `${kerning}px`; title.style.transform = `translateY(${utils.lerp(40, 0, spring)}px)`; const subP = utils.clamp((ip - 0.3) / 0.7, 0, 1); subtitle.style.opacity = subP.toString(); subtitle.style.transform = `translateX(${utils.lerp(-20, 0, utils.easeOutCubic(subP))}px)`; const lineP = utils.clamp((ip - 0.4) / 0.6, 0, 1); const lineW = utils.lerp(0, 280, utils.easeOutCubic(lineP)); line.style.width = `${lineW}px`; if (timeline.isOutro) { const op = utils.clamp(timeline.outroProgress, 0, 1); container.style.opacity = (1 - op).toString(); container.style.transform = `scale(${utils.lerp(1, 0.95, utils.easeInOutCubic(op))})`; } } });"
-      }
-    },
-    {
-      "id": "live-info-widget",
-      "name": "Widget de Reloj y Clima",
-      "description": "Información en vivo de hora y temperatura para esquinas de pantalla. Ideal para transmisiones deportivas y eventos.",
-      "version": "4.1.5",
-      "author": "Jonatan Barón",
-      "updatedAt": "2026-04-22T09:26:48.501Z",
-      "files": {
-        "manifest": {
-          "id": "live-info-widget",
-          "name": "Widget de Reloj y Clima",
-          "description": "Información en vivo de hora y temperatura para esquinas de pantalla.",
-          "version": "4.1.5",
-          "author": "Jonatan Barón",
-          "presets": [
-            "branding",
-            "motion",
-            "layout"
-          ],
-          "schema": [
-            {
-              "id": "location",
-              "type": "string",
-              "label": "Ubicación",
-              "defaultValue": "MADRID, ES"
-            },
-            {
-              "id": "temp",
-              "type": "string",
-              "label": "Temperatura",
-              "defaultValue": "22°C"
-            },
-            {
-              "id": "weatherIcon",
-              "type": "select",
-              "label": "Clima",
-              "defaultValue": "sunny",
-              "options": [
-                {
-                  "label": "☀️ Soleado",
-                  "value": "sunny"
-                },
-                {
-                  "label": "☁️ Nublado",
-                  "value": "cloudy"
-                }
-              ]
-            }
-          ]
-        },
-        "html": "<div id=\"info-widget\" class=\"dv-glass\" style=\"display: inline-flex; align-items: center; gap: 14px; padding: 10px 20px; border-radius: 8px; border-left: 3px solid var(--accent);\"><div id=\"weather-icon\" style=\"font-size: 22px; line-height: 1;\">☀️</div><div style=\"display: flex; flex-direction: column; gap: 2px;\"><div id=\"current-time\" style=\"color: white; font-size: 26px; font-weight: 800; letter-spacing: 2px; line-height: 1;\">00:00</div><div style=\"display: flex; gap: 8px; align-items: center;\"><span id=\"current-location\" class=\"dv-label\" style=\"font-size: 11px; letter-spacing: 1px;\"></span><span style=\"color: rgba(255,255,255,0.3); font-size: 10px;\">•</span><span id=\"current-temp\" style=\"color: var(--accent); font-size: 13px; font-weight: 700;\"></span></div></div></div>",
-        "css": "",
-        "js": "dvEngine.register({ awake: (ctx) => { ctx.refs.widget = ctx.root.getElementById('info-widget'); ctx.refs.time = ctx.root.getElementById('current-time'); ctx.refs.temp = ctx.root.getElementById('current-temp'); ctx.refs.loc = ctx.root.getElementById('current-location'); ctx.refs.wIcon = ctx.root.getElementById('weather-icon'); ctx._lastMinute = -1; }, update: (ctx) => { const { frame, props, refs, timeline, utils } = ctx; const { widget, time, temp, loc, wIcon } = refs; if (!widget) return; const now = new Date(); const minutes = now.getMinutes(); if (ctx._lastMinute !== minutes) { ctx._lastMinute = minutes; const hh = String(now.getHours()).padStart(2, '0'); const mm = String(minutes).padStart(2, '0'); if (time) time.innerText = `${hh}:${mm}`; } if (temp) temp.innerText = props.temp || '22°C'; if (loc) loc.innerText = props.location || 'MADRID, ES'; const ip = utils.clamp(timeline.introProgress, 0, 1); widget.style.opacity = ip.toString(); widget.style.transform = `translateY(${utils.lerp(-15, 0, utils.easeOutCubic(ip))}px)`; if (timeline.isOutro) { const op = utils.clamp(timeline.outroProgress, 0, 1); widget.style.opacity = (1 - op).toString(); widget.style.transform = `translateY(${utils.lerp(0, -15, utils.easeInOutCubic(op))}px)`; } } });"
-      }
-    },
-    {
       "id": "dv-studio-master",
       "name": "DVGE Studio Master",
       "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
-      "version": "5.7.0",
+      "version": "5.8.0",
       "author": "Jonatan Barón & Antigravity",
-      "updatedAt": "2026-04-29T08:58:00.000Z",
+      "updatedAt": "2026-04-30T09:00:00.000Z",
       "files": {
         "manifest": {
           "id": "dv-studio-master",
           "name": "DVGE Studio Master",
           "description": "Renderizador de código profesional.",
-          "version": "5.7.0",
+          "version": "5.8.0",
           "author": "Jonatan Barón & Antigravity",
-          "presets": [
-            "branding",
-            "motion",
-            "layout"
-          ],
+          "presets": ["branding", "motion", "layout"],
           "schema": [
-            {
-              "id": "masterRules",
-              "type": "prompt",
-              "label": "Contexto para IA",
-              "defaultValue": "Reglas"
-            },
-            {
-              "id": "htmlCode",
-              "type": "code",
-              "label": "Estructura HTML",
-              "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>"
-            },
-            {
-              "id": "cssCode",
-              "type": "code",
-              "label": "Estilos CSS",
-              "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }"
-            },
-            {
-              "id": "jsCode",
-              "type": "code",
-              "label": "Lógica JS",
-              "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };"
-            }
+            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
+            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>" },
+            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }" },
+            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-lower-third",
+      "name": "Lower Third Base",
+      "description": "Plantilla base de Lower Third, construida sobre el motor Studio Master. Editable en código.",
+      "version": "1.0.0",
+      "author": "Antigravity",
+      "updatedAt": "2026-04-30T09:00:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-lower-third",
+          "name": "Lower Third Base",
+          "description": "Plantilla base de Lower Third.",
+          "version": "1.0.0",
+          "author": "Antigravity",
+          "presets": ["branding", "motion"],
+          "schema": [
+            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
+            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"lt-root\">\n  <div id=\"lt-name\">Nombre Apellido</div>\n  <div id=\"lt-role\">Cargo Profesional</div>\n</div>" },
+            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#lt-root { position: absolute; bottom: 100px; left: 100px; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); border-left: 6px solid var(--accent); padding: 20px 40px; border-radius: 4px; overflow: hidden; }\n#lt-name { color: white; font-size: 60px; font-weight: bold; margin: 0; line-height: 1; }\n#lt-role { color: #aaa; font-size: 30px; margin-top: 10px; line-height: 1; }" },
+            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('lt-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateX(${ctx.utils.lerp(-50, 0, ctx.utils.easeOutCubic(ip))}px)`;\n};" }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-ticker",
+      "name": "News Ticker Base",
+      "description": "Plantilla base de Ticker de noticias deslizable, basada en Studio Master.",
+      "version": "1.0.0",
+      "author": "Antigravity",
+      "updatedAt": "2026-04-30T09:00:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-ticker",
+          "name": "News Ticker Base",
+          "description": "Plantilla base de Ticker.",
+          "version": "1.0.0",
+          "author": "Antigravity",
+          "presets": ["branding", "motion"],
+          "schema": [
+            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
+            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"ticker-root\">\n  <div id=\"ticker-label\">BREAKING</div>\n  <div id=\"ticker-track\">\n    <div id=\"ticker-content\">NOTICIA IMPORTANTE DE ÚLTIMA HORA EN DIRECTO</div>\n  </div>\n</div>" },
+            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#ticker-root { position: absolute; bottom: 50px; left: 50px; right: 50px; height: 60px; display: flex; background: rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }\n#ticker-label { background: var(--accent); color: white; padding: 0 30px; display: flex; align-items: center; font-size: 30px; font-weight: bold; z-index: 2; }\n#ticker-track { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; }\n#ticker-content { position: absolute; white-space: nowrap; color: white; font-size: 30px; left: 100%; }" },
+            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const content = ctx.root.getElementById('ticker-content');\n  const root = ctx.root.getElementById('ticker-root');\n  if (!content || !root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  const speed = 5;\n  content.style.transform = `translateX(-${frame * speed}px)`;\n};" }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-overlay",
+      "name": "Live Overlay Base",
+      "description": "Plantilla base de mosca / overlay en esquina.",
+      "version": "1.0.0",
+      "author": "Antigravity",
+      "updatedAt": "2026-04-30T09:00:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-overlay",
+          "name": "Live Overlay Base",
+          "description": "Plantilla base de mosca.",
+          "version": "1.0.0",
+          "author": "Antigravity",
+          "presets": ["branding", "motion"],
+          "schema": [
+            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
+            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"overlay-root\">\n  <div id=\"overlay-logo\">LIVE</div>\n</div>" },
+            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#overlay-root { position: absolute; top: 50px; right: 50px; background: red; padding: 10px 20px; border-radius: 8px; }\n#overlay-logo { color: white; font-size: 40px; font-weight: bold; }" },
+            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('overlay-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `scale(${ctx.utils.lerp(0.8, 1, ctx.utils.easeOutBounce(ip))})`;\n};" }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
