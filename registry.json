@@ -5,7 +5,7 @@
       "name": "DVGE Studio Master",
       "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
       "version": "5.8.0",
-      "author": "Jonatan Barón & Antigravity",
+      "author": "Jonatan Barón",
       "updatedAt": "2026-04-30T09:00:00.000Z",
       "files": {
         "manifest": {
@@ -13,7 +13,7 @@
           "name": "DVGE Studio Master",
           "description": "Renderizador de código profesional.",
           "version": "5.8.0",
-          "author": "Jonatan Barón & Antigravity",
+          "author": "Jonatan Barón",
           "presets": ["branding", "motion", "layout"],
           "schema": [
             { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
@@ -32,7 +32,7 @@
       "name": "Lower Third Base",
       "description": "Plantilla base de Lower Third, construida sobre el motor Studio Master. Editable en código.",
       "version": "1.0.0",
-      "author": "Antigravity",
+      "author": "Jonatan Barón ",
       "updatedAt": "2026-04-30T09:00:00.000Z",
       "files": {
         "manifest": {
@@ -40,7 +40,7 @@
           "name": "Lower Third Base",
           "description": "Plantilla base de Lower Third.",
           "version": "1.0.0",
-          "author": "Antigravity",
+          "author": "Jonatan Barón",
           "presets": ["branding", "motion"],
           "schema": [
             { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
@@ -59,7 +59,7 @@
       "name": "News Ticker Base",
       "description": "Plantilla base de Ticker de noticias deslizable, basada en Studio Master.",
       "version": "1.0.0",
-      "author": "Antigravity",
+      "author": "Jonatan Barón",
       "updatedAt": "2026-04-30T09:00:00.000Z",
       "files": {
         "manifest": {
@@ -67,7 +67,7 @@
           "name": "News Ticker Base",
           "description": "Plantilla base de Ticker.",
           "version": "1.0.0",
-          "author": "Antigravity",
+          "author": "Jonatan Barón",
           "presets": ["branding", "motion"],
           "schema": [
             { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
@@ -86,7 +86,7 @@
       "name": "Live Overlay Base",
       "description": "Plantilla base de mosca / overlay en esquina.",
       "version": "1.0.0",
-      "author": "Antigravity",
+      "author": "Jonatan Barón",
       "updatedAt": "2026-04-30T09:00:00.000Z",
       "files": {
         "manifest": {
@@ -94,7 +94,7 @@
           "name": "Live Overlay Base",
           "description": "Plantilla base de mosca.",
           "version": "1.0.0",
-          "author": "Antigravity",
+          "author": "Jonatan Barón",
           "presets": ["branding", "motion"],
           "schema": [
             { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
