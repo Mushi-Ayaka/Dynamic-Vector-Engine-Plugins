@@ -14,12 +14,36 @@
           "description": "Renderizador de código profesional.",
           "version": "5.8.0",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion", "layout"],
+          "presets": [
+            "branding",
+            "motion",
+            "layout"
+          ],
           "schema": [
-            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
-            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>" },
-            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };" }
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"studio-root\" class=\"dv-safe-area\"><h1 id=\"studio-title\">DVGE STUDIO</h1><div id=\"studio-bar\"></div></div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#studio-root { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; } #studio-title { color: var(--accent); font-size: 80px; font-weight: 900; margin: 0; } #studio-bar { width: 200px; height: 4px; background: white; margin-top: 10px; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => { const title = ctx.root.getElementById('studio-title'); const bar = ctx.root.getElementById('studio-bar'); if (!title || !bar) return; const ip = ctx.timeline.introProgress; title.style.opacity = ip; title.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`; bar.style.width = `${ctx.utils.lerp(0, 400, ctx.utils.spring(ip))}px`; };"
+            }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
@@ -41,12 +65,35 @@
           "description": "Plantilla base de Lower Third.",
           "version": "1.0.0",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion"],
+          "presets": [
+            "branding",
+            "motion"
+          ],
           "schema": [
-            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
-            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"lt-root\">\n  <div id=\"lt-name\">Nombre Apellido</div>\n  <div id=\"lt-role\">Cargo Profesional</div>\n</div>" },
-            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#lt-root { position: absolute; bottom: 100px; left: 100px; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); border-left: 6px solid var(--accent); padding: 20px 40px; border-radius: 4px; overflow: hidden; }\n#lt-name { color: white; font-size: 60px; font-weight: bold; margin: 0; line-height: 1; }\n#lt-role { color: #aaa; font-size: 30px; margin-top: 10px; line-height: 1; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('lt-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateX(${ctx.utils.lerp(-50, 0, ctx.utils.easeOutCubic(ip))}px)`;\n};" }
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "Reglas"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"lt-root\">\n  <div id=\"lt-name\">Nombre Apellido</div>\n  <div id=\"lt-role\">Cargo Profesional</div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#lt-root { position: absolute; bottom: 100px; left: 100px; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); border-left: 6px solid var(--accent); padding: 20px 40px; border-radius: 4px; overflow: hidden; }\n#lt-name { color: white; font-size: 60px; font-weight: bold; margin: 0; line-height: 1; }\n#lt-role { color: #aaa; font-size: 30px; margin-top: 10px; line-height: 1; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('lt-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateX(${ctx.utils.lerp(-50, 0, ctx.utils.easeOutCubic(ip))}px)`;\n};"
+            }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
@@ -68,12 +115,35 @@
           "description": "Plantilla base de Ticker.",
           "version": "1.0.0",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion"],
+          "presets": [
+            "branding",
+            "motion"
+          ],
           "schema": [
-            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
-            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"ticker-root\">\n  <div id=\"ticker-label\">BREAKING</div>\n  <div id=\"ticker-track\">\n    <div id=\"ticker-content\">NOTICIA IMPORTANTE DE ÚLTIMA HORA EN DIRECTO</div>\n  </div>\n</div>" },
-            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#ticker-root { position: absolute; bottom: 50px; left: 50px; right: 50px; height: 60px; display: flex; background: rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }\n#ticker-label { background: var(--accent); color: white; padding: 0 30px; display: flex; align-items: center; font-size: 30px; font-weight: bold; z-index: 2; }\n#ticker-track { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; }\n#ticker-content { position: absolute; white-space: nowrap; color: white; font-size: 30px; left: 100%; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const content = ctx.root.getElementById('ticker-content');\n  const root = ctx.root.getElementById('ticker-root');\n  if (!content || !root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  const speed = 5;\n  content.style.transform = `translateX(-${frame * speed}px)`;\n};" }
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "Reglas"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"ticker-root\">\n  <div id=\"ticker-label\">BREAKING</div>\n  <div id=\"ticker-track\">\n    <div id=\"ticker-content\">NOTICIA IMPORTANTE DE ÚLTIMA HORA EN DIRECTO</div>\n  </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#ticker-root { position: absolute; bottom: 50px; left: 50px; right: 50px; height: 60px; display: flex; background: rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }\n#ticker-label { background: var(--accent); color: white; padding: 0 30px; display: flex; align-items: center; font-size: 30px; font-weight: bold; z-index: 2; }\n#ticker-track { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; }\n#ticker-content { position: absolute; white-space: nowrap; color: white; font-size: 30px; left: 100%; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const content = ctx.root.getElementById('ticker-content');\n  const root = ctx.root.getElementById('ticker-root');\n  if (!content || !root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  const speed = 5;\n  content.style.transform = `translateX(-${frame * speed}px)`;\n};"
+            }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
@@ -95,12 +165,35 @@
           "description": "Plantilla base de mosca.",
           "version": "1.0.0",
           "author": "Jonatan Barón",
-          "presets": ["branding", "motion"],
+          "presets": [
+            "branding",
+            "motion"
+          ],
           "schema": [
-            { "id": "masterRules", "type": "prompt", "label": "Contexto para IA", "defaultValue": "Reglas" },
-            { "id": "htmlCode", "type": "code", "label": "Estructura HTML", "defaultValue": "<div id=\"overlay-root\">\n  <div id=\"overlay-logo\">LIVE</div>\n</div>" },
-            { "id": "cssCode", "type": "code", "label": "Estilos CSS", "defaultValue": "#overlay-root { position: absolute; top: 50px; right: 50px; background: red; padding: 10px 20px; border-radius: 8px; }\n#overlay-logo { color: white; font-size: 40px; font-weight: bold; }" },
-            { "id": "jsCode", "type": "code", "label": "Lógica JS", "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('overlay-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `scale(${ctx.utils.lerp(0.8, 1, ctx.utils.easeOutBounce(ip))})`;\n};" }
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "Reglas"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<div id=\"overlay-root\">\n  <div id=\"overlay-logo\">LIVE</div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "#overlay-root { position: absolute; top: 50px; right: 50px; background: red; padding: 10px 20px; border-radius: 8px; }\n#overlay-logo { color: white; font-size: 40px; font-weight: bold; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('overlay-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `scale(${ctx.utils.lerp(0.8, 1, ctx.utils.easeOutBounce(ip))})`;\n};"
+            }
           ]
         },
         "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
