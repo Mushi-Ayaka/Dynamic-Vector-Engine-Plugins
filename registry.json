@@ -80,19 +80,19 @@
               "id": "htmlCode",
               "type": "code",
               "label": "Estructura HTML",
-              "defaultValue": "<div id=\"lt-root\">\n  <div id=\"lt-name\">Nombre Apellido</div>\n  <div id=\"lt-role\">Cargo Profesional</div>\n</div>"
+              "defaultValue": "<!-- @dv-prop { \"id\": \"userName\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Nombre\", \"defaultValue\": \"JONATAN BARÓN\" } -->\n<!-- @dv-prop { \"id\": \"userRole\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Cargo\", \"defaultValue\": \"SENIOR CREATIVE DEVELOPER\" } -->\n<!-- @dv-prop { \"id\": \"ltPos\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición\", \"defaultValue\": \"bottom left\" } -->\n\n<div id=\"lt-scene\">\n  <div id=\"lt-container\">\n    <div id=\"lt-content\">\n      <h1 id=\"lt-name\"></h1>\n      <p id=\"lt-role\"></p>\n    </div>\n    <div id=\"lt-accent\"></div>\n  </div>\n</div>"
             },
             {
               "id": "cssCode",
               "type": "code",
               "label": "Estilos CSS",
-              "defaultValue": "#lt-root { position: absolute; bottom: 100px; left: 100px; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); border-left: 6px solid var(--accent); padding: 20px 40px; border-radius: 4px; overflow: hidden; }\n#lt-name { color: white; font-size: 60px; font-weight: bold; margin: 0; line-height: 1; }\n#lt-role { color: #aaa; font-size: 30px; margin-top: 10px; line-height: 1; }"
+              "defaultValue": "/* @dv-prop { \"id\": \"accentColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Acento\", \"defaultValue\": \"#E44C30\" } */\n/* @dv-prop { \"id\": \"nameSize\", \"type\": \"number\", \"group\": \"Estilo\", \"label\": \"Tam. Nombre\", \"defaultValue\": 48 } */\n\n#lt-scene {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  display: grid;\n  padding: 80px;\n  place-items: var(--ltPos);\n  font-family: 'Inter', sans-serif;\n}\n\n#lt-container {\n  display: flex;\n  align-items: center;\n  background: rgba(0,0,0,0.85);\n  backdrop-filter: blur(10px);\n  border-radius: 4px;\n  overflow: hidden;\n  opacity: 0;\n}\n\n#lt-accent {\n  width: 8px;\n  height: 100%;\n  background: var(--accentColor);\n  order: -1;\n}\n\n#lt-content {\n  padding: 20px 40px;\n}\n\n#lt-name {\n  color: white;\n  font-size: calc(var(--nameSize) * 1px);\n  font-weight: 900;\n  margin: 0;\n  text-transform: uppercase;\n  letter-spacing: 2px;\n}\n\n#lt-role {\n  color: var(--accentColor);\n  font-size: 18px;\n  font-weight: 600;\n  margin: 5px 0 0 0;\n  letter-spacing: 4px;\n}"
             },
             {
               "id": "jsCode",
               "type": "code",
               "label": "Lógica JS",
-              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const root = ctx.root.getElementById('lt-root');\n  if (!root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateX(${ctx.utils.lerp(-50, 0, ctx.utils.easeOutCubic(ip))}px)`;\n};"
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const container = ctx.root.getElementById('lt-container');\n  const nameEl = ctx.root.getElementById('lt-name');\n  const roleEl = ctx.root.getElementById('lt-role');\n  \n  if (nameEl) nameEl.innerText = props.userName;\n  if (roleEl) roleEl.innerText = props.userRole;\n\n  const intro = ctx.utils.clamp(ctx.timeline.introProgress, 0, 1);\n  const outro = ctx.utils.clamp(ctx.timeline.outroProgress, 0, 1);\n  \n  const ease = ctx.utils.easeOutQuart(intro);\n  \n  if (container) {\n    container.style.opacity = (intro * (1 - outro)).toString();\n    container.style.transform = `translateX(${ctx.utils.lerp(-100, 0, ease)}px) skewX(${ctx.utils.lerp(10, 0, ease)}deg)`;\n  }\n};"
             }
           ]
         },
@@ -130,19 +130,19 @@
               "id": "htmlCode",
               "type": "code",
               "label": "Estructura HTML",
-              "defaultValue": "<div id=\"ticker-root\">\n  <div id=\"ticker-label\">BREAKING</div>\n  <div id=\"ticker-track\">\n    <div id=\"ticker-content\">NOTICIA IMPORTANTE DE ÚLTIMA HORA EN DIRECTO</div>\n  </div>\n</div>"
+              "defaultValue": "<!-- @dv-prop { \"id\": \"tickerNews\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Titulares\", \"defaultValue\": \"ULTIMA HORA: El motor DVGE v6.0 revoluciona el broadcast con su nueva arquitectura de plantillas dinámicas...\" } -->\n<!-- @dv-prop { \"id\": \"tickerLabel\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Etiqueta\", \"defaultValue\": \"FLASH\" } -->\n\n<div id=\"ticker-wrap\">\n  <div id=\"ticker-label\"></div>\n  <div id=\"ticker-scroll\">\n    <div id=\"ticker-text\"></div>\n    <div id=\"ticker-text-copy\"></div>\n  </div>\n</div>"
             },
             {
               "id": "cssCode",
               "type": "code",
               "label": "Estilos CSS",
-              "defaultValue": "#ticker-root { position: absolute; bottom: 50px; left: 50px; right: 50px; height: 60px; display: flex; background: rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }\n#ticker-label { background: var(--accent); color: white; padding: 0 30px; display: flex; align-items: center; font-size: 30px; font-weight: bold; z-index: 2; }\n#ticker-track { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; }\n#ticker-content { position: absolute; white-space: nowrap; color: white; font-size: 30px; left: 100%; }"
+              "defaultValue": "/* @dv-prop { \"id\": \"tickerSpeed\", \"type\": \"number\", \"group\": \"Movimiento\", \"label\": \"Velocidad\", \"defaultValue\": 5 } */\n/* @dv-prop { \"id\": \"tickerColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Fondo\", \"defaultValue\": \"#111111\" } */\n\n#ticker-wrap {\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n  height: 60px;\n  background: var(--tickerColor);\n  display: flex;\n  align-items: center;\n  overflow: hidden;\n  font-family: 'Inter', sans-serif;\n  border-top: 2px solid #E44C30;\n}\n\n#ticker-label {\n  background: #E44C30;\n  color: white;\n  padding: 0 30px;\n  height: 100%;\n  display: flex;\n  align-items: center;\n  font-weight: 900;\n  z-index: 10;\n  box-shadow: 10px 0 30px rgba(0,0,0,0.5);\n}\n\n#ticker-scroll {\n  display: flex;\n  white-space: nowrap;\n  padding-left: 20px;\n}\n\n#ticker-text, #ticker-text-copy {\n  color: white;\n  font-size: 22px;\n  padding-right: 100px;\n}"
             },
             {
               "id": "jsCode",
               "type": "code",
               "label": "Lógica JS",
-              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const content = ctx.root.getElementById('ticker-content');\n  const root = ctx.root.getElementById('ticker-root');\n  if (!content || !root) return;\n  const ip = ctx.timeline.introProgress;\n  root.style.opacity = ip;\n  root.style.transform = `translateY(${ctx.utils.lerp(20, 0, ip)}px)`;\n  const speed = 5;\n  content.style.transform = `translateX(-${frame * speed}px)`;\n};"
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  const label = ctx.root.getElementById('ticker-label');\n  const t1 = ctx.root.getElementById('ticker-text');\n  const t2 = ctx.root.getElementById('ticker-text-copy');\n  const scroll = ctx.root.getElementById('ticker-scroll');\n\n  if (label) label.innerText = props.tickerLabel;\n  if (t1) t1.innerText = props.tickerNews;\n  if (t2) t2.innerText = props.tickerNews;\n\n  const speed = props.tickerSpeed || 5;\n  const x = -((frame * speed) % (t1.offsetWidth || 1000));\n  if (scroll) scroll.style.transform = `translateX(${x}px)`;\n\n  const ip = ctx.timeline.introProgress;\n  const wrap = ctx.root.getElementById('ticker-wrap');\n  if (wrap) wrap.style.transform = `translateY(${ctx.utils.lerp(60, 0, ctx.utils.easeOutExpo(ip))}px)`;\n};"
             }
           ]
         },
@@ -204,10 +204,10 @@
     {
       "id": "proyecto-vacio",
       "name": "Proyecto Vacio",
-      "description": "Empezar Proyecto vacio.",
+      "description": "Un lienzo en blanco con el motor Studio Master listo para programar desde cero.",
       "version": "1.0.0",
       "author": "Jonatan Barón",
-      "updatedAt": "2026-04-30T22:50:42.925Z",
+      "updatedAt": "2026-04-30T23:30:00.000Z",
       "files": {
         "manifest": {
           "id": "proyecto-vacio",
@@ -230,25 +230,375 @@
               "id": "htmlCode",
               "type": "code",
               "label": "Estructura HTML",
-              "defaultValue": ""
+              "defaultValue": "<div id=\"canvas-root\">\n  <!-- Tu HTML aquí -->\n</div>"
             },
             {
               "id": "cssCode",
               "type": "code",
               "label": "Estilos CSS",
-              "defaultValue": ""
+              "defaultValue": "#canvas-root {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  display: grid;\n  place-items: center;\n}"
             },
             {
               "id": "jsCode",
               "type": "code",
               "label": "Lógica JS",
-              "defaultValue": ""
+              "defaultValue": "window.renderDVGE = (frame, props, ctx) => {\n  // Tu lógica de animación aquí\n};"
             }
           ]
         },
-        "html": "",
-        "css": "",
-        "js": ""
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-code-typing",
+      "name": "Code Typing Master",
+      "description": "Simulador de escritura de código profesional con ventana de editor moderna. Ideal para tutoriales, presentaciones de desarrollo o overlays de programación.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:35:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-code-typing",
+          "name": "Code Typing Master",
+          "description": "Simulador de escritura de código profesional con ventana de editor moderna. Ideal para tutoriales o presentaciones de desarrollo.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"codeText\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Código a Escribir\", \"defaultValue\": \"function helloWorld() {\\n  console.log('DVGE');\\n}\" } -->\n<!-- @dv-prop { \"id\": \"showWindow\", \"type\": \"boolean\", \"group\": \"Estilo\", \"label\": \"Mostrar Ventana\", \"defaultValue\": true } -->\n<!-- @dv-prop { \"id\": \"posicion\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición\", \"defaultValue\": \"center center\" } -->\n\n<div id=\"wrapper\">\n  <div id=\"code-window\">\n    <div id=\"window-header\">\n      <div class=\"dot red\"></div>\n      <div class=\"dot yellow\"></div>\n      <div class=\"dot green\"></div>\n    </div>\n    <div id=\"editor\">\n      <span id=\"text-target\"></span><span id=\"cursor\">|</span>\n    </div>\n  </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"windowWidth\", \"type\": \"number\", \"group\": \"Dimensiones\", \"label\": \"Ancho Ventana\", \"defaultValue\": 800 } */\n/* @dv-prop { \"id\": \"fontSize\", \"type\": \"number\", \"group\": \"Estilo\", \"label\": \"Tamaño Fuente\", \"defaultValue\": 32 } */\n/* @dv-prop { \"id\": \"accentColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Cursor\", \"defaultValue\": \"#00d4ff\" } */\n\n#wrapper {\n  position: absolute;\n  width: 1920px;\n  height: 1080px;\n  display: grid;\n  place-items: var(--posicion);\n  background: transparent;\n}\n\n#code-window {\n  width: calc(var(--windowWidth) * 1px);\n  background: #1e1e1e;\n  border-radius: 12px;\n  box-shadow: 0 30px 60px rgba(0,0,0,0.5);\n  overflow: hidden;\n  border: 1px solid rgba(255,255,255,0.1);\n  display: flex;\n  flex-direction: column;\n}\n\n#window-header {\n  height: 40px;\n  background: #2d2d2d;\n  display: flex;\n  align-items: center;\n  padding: 0 15px;\n  gap: 8px;\n}\n\n.dot {\n  width: 12px;\n  height: 12px;\n  border-radius: 50%;\n}\n.red { background: #ff5f56; }\n.yellow { background: #ffbd2e; }\n.green { background: #27c93f; }\n\n#editor {\n  padding: 30px;\n  font-family: 'Consolas', 'Monaco', monospace;\n  font-size: calc(var(--fontSize) * 1px);\n  line-height: 1.5;\n  color: #d4d4d4;\n  min-height: 100px;\n  text-align: left;\n}\n\n#cursor {\n  color: var(--accentColor);\n  font-weight: bold;\n}"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global (%)\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"typeSpeed\", \"type\": \"number\", \"group\": \"Animación\", \"label\": \"Velocidad Escritura\", \"defaultValue\": 0.4 }\n// @dv-prop { \"id\": \"curvaEntrada\", \"type\": \"easing\", \"group\": \"Animación\", \"label\": \"Curva Entrada\", \"defaultValue\": \"[0.2, 0.8, 0.2, 1]\" }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const intro = ctx.timeline.introProgress;\n  const outro = ctx.timeline.outroProgress;\n  const ease = ctx.utils.bezier(props.curvaEntrada, intro);\n  const opacityMultiplier = (props.globalOpacity ?? 100) / 100;\n\n  const windowEl = ctx.root.getElementById('code-window');\n  const textEl = ctx.root.getElementById('text-target');\n  const cursorEl = ctx.root.getElementById('cursor');\n  const headerEl = ctx.root.getElementById('window-header');\n\n  if (windowEl) {\n    windowEl.style.border = props.showWindow ? '1px solid rgba(255,255,255,0.1)' : 'none';\n    windowEl.style.background = props.showWindow ? '#1e1e1e' : 'transparent';\n    windowEl.style.boxShadow = props.showWindow ? '0 30px 60px rgba(0,0,0,0.5)' : 'none';\n    if (headerEl) headerEl.style.display = props.showWindow ? 'flex' : 'none';\n\n    const scale = ctx.utils.lerp(0.9, 1, ease) * ctx.utils.lerp(1, 0.95, outro);\n    windowEl.style.opacity = ctx.utils.lerp(0, 1, ease) * ctx.utils.lerp(1, 0, outro) * opacityMultiplier;\n    windowEl.style.transform = `scale(${scale})`;\n\n    if (textEl) {\n      const fullText = props.codeText || \"\";\n      const typeProgress = ctx.utils.clamp((frame - 10) * props.typeSpeed, 0, fullText.length);\n      textEl.innerText = fullText.slice(0, Math.floor(typeProgress));\n    }\n\n    if (cursorEl) {\n      cursorEl.style.opacity = (frame % 30 < 15) ? '1' : '0';\n    }\n  }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-flashcard",
+      "name": "EduFlip Flashcard Master",
+      "description": "Tarjeta de aprendizaje interactiva con efecto de giro 3D. Ideal para contenido educativo o aprendizaje de idiomas.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:40:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-flashcard",
+          "name": "EduFlip Flashcard Master",
+          "description": "Tarjeta con efecto 3D flip. Ideal para glosarios o idiomas.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"englishWord\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Palabra en Inglés\", \"defaultValue\": \"KNOWLEDGE\" } -->\n<!-- @dv-prop { \"id\": \"spanishWord\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Traducción\", \"defaultValue\": \"CONOCIMIENTO\" } -->\n<!-- @dv-prop { \"id\": \"posicion\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición\", \"defaultValue\": \"center center\" } -->\n\n<div id=\"wrapper\">\n  <div id=\"flashcard-container\">\n    <div id=\"card-inner\">\n      <div class=\"card-face front\">\n        <span id=\"text-en\"></span>\n      </div>\n      <div class=\"card-face back\">\n        <span id=\"text-es\"></span>\n      </div>\n    </div>\n    <div id=\"card-shadow\"></div>\n  </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"cardColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Tarjeta\", \"defaultValue\": \"#2d3436\" } */\n/* @dv-prop { \"id\": \"textColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Texto\", \"defaultValue\": \"#00d4ff\" } */\n/* @dv-prop { \"id\": \"fontSize\", \"type\": \"number\", \"group\": \"Estilo\", \"label\": \"Tamaño Fuente\", \"defaultValue\": 80 } */\n\n#wrapper {\n  position: absolute;\n  width: 1920px;\n  height: 1080px;\n  display: grid;\n  place-items: var(--posicion);\n  perspective: 2000px;\n}\n\n#flashcard-container {\n  width: 900px;\n  height: 400px;\n  position: relative;\n}\n\n#card-inner {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  transform-style: preserve-3d;\n}\n\n.card-face {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  backface-visibility: hidden;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 25px;\n  background: var(--cardColor);\n  border: 4px solid rgba(255,255,255,0.1);\n  font-family: 'Montserrat', sans-serif;\n  font-weight: 800;\n  font-size: calc(var(--fontSize) * 1px);\n  color: var(--textColor);\n  text-transform: uppercase;\n  letter-spacing: 4px;\n}\n\n.back {\n  transform: rotateX(180deg);\n  background: #ffffff;\n  color: #2d3436;\n}\n\n#card-shadow {\n  position: absolute;\n  bottom: -50px;\n  width: 80%;\n  left: 10%;\n  height: 20px;\n  background: rgba(0,0,0,0.3);\n  filter: blur(15px);\n  border-radius: 50%;\n}"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global (%)\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"curvaEntrada\", \"type\": \"easing\", \"group\": \"Animación\", \"label\": \"Curva Entrada\", \"defaultValue\": \"[0.17, 0.67, 0.83, 0.67]\" }\n// @dv-prop { \"id\": \"flipFrame\", \"type\": \"number\", \"group\": \"Animación\", \"label\": \"Frame de Giro\", \"defaultValue\": 120 }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const intro = ctx.timeline.introProgress;\n  const outro = ctx.timeline.outroProgress;\n  const ease = ctx.utils.bezier(props.curvaEntrada, intro);\n  const opacityMultiplier = (props.globalOpacity ?? 100) / 100;\n\n  const container = ctx.root.getElementById('flashcard-container');\n  const card = ctx.root.getElementById('card-inner');\n  const textEn = ctx.root.getElementById('text-en');\n  const textEs = ctx.root.getElementById('text-es');\n  const shadow = ctx.root.getElementById('card-shadow');\n\n  if (container && card) {\n    const yPos = ctx.utils.lerp(100, 0, ease) + ctx.utils.lerp(0, -100, outro);\n    container.style.opacity = ctx.utils.lerp(0, 1, ease) * ctx.utils.lerp(1, 0, outro) * opacityMultiplier;\n    container.style.transform = `translateY(${yPos}px)`;\n\n    const flipStart = props.flipFrame;\n    const flipDuration = 40;\n    const flipProgress = ctx.utils.clamp((frame - flipStart) / flipDuration, 0, 1);\n    const rotationX = ctx.utils.lerp(0, 180, flipProgress);\n    card.style.transform = `rotateX(${rotationX}deg)`;\n\n    if (textEn) textEn.innerText = props.englishWord;\n    if (textEs) textEs.innerText = props.spanishWord;\n\n    if (shadow) {\n        shadow.style.opacity = ctx.utils.lerp(0, 1, ease) * (1 - (flipProgress * 0.5));\n        shadow.style.transform = `scale(${ctx.utils.lerp(0.5, 1, ease)})`;\n    }\n  }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-math-morph",
+      "name": "Quantum Math Morph",
+      "description": "Visualización cinematográfica de fórmulas científicas con efecto de morphing y brillo dinámico.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:45:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-math-morph",
+          "name": "Quantum Math Morph",
+          "description": "Efecto de transición entre ecuaciones matemáticas.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"mathStart\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Ecuación Inicial\", \"defaultValue\": \"E = mc²\" } -->\n<!-- @dv-prop { \"id\": \"mathEnd\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Ecuación Final\", \"defaultValue\": \"e = h · ν\" } -->\n<!-- @dv-prop { \"id\": \"posicion\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición\", \"defaultValue\": \"center center\" } -->\n\n<div id=\"wrapper\">\n  <div id=\"math-container\">\n    <div id=\"formula-box\">\n      <span id=\"equation-text\"></span>\n    </div>\n    <div id=\"glow-line\"></div>\n  </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"mathColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Ecuación\", \"defaultValue\": \"#ffffff\" } */\n/* @dv-prop { \"id\": \"fontSize\", \"type\": \"number\", \"group\": \"Estilo\", \"label\": \"Tamaño Fuente\", \"defaultValue\": 120 } */\n/* @dv-prop { \"id\": \"accentColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Brillo\", \"defaultValue\": \"#00d4ff\" } */\n\n#wrapper {\n  position: absolute;\n  width: 1920px;\n  height: 1080px;\n  display: grid;\n  place-items: var(--posicion);\n}\n\n#math-container {\n  width: 1200px;\n  height: 400px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n\n#formula-box {\n  font-family: 'serif';\n  font-style: italic;\n  font-size: calc(var(--fontSize) * 1px);\n  color: var(--mathColor);\n  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);\n  text-align: center;\n}\n\n#glow-line {\n  height: 4px;\n  background: var(--accentColor);\n  margin-top: 40px;\n  box-shadow: 0 0 20px var(--accentColor);\n  border-radius: 2px;\n  width: 0px; \n}"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global (%)\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"curvaEntrada\", \"type\": \"easing\", \"group\": \"Animación\", \"label\": \"Curva Entrada\", \"defaultValue\": \"[0.4, 0, 0.2, 1]\" }\n// @dv-prop { \"id\": \"transFrame\", \"type\": \"number\", \"group\": \"Transformación\", \"label\": \"Frame del Cambio\", \"defaultValue\": 100 }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const intro = ctx.timeline.introProgress;\n  const outro = ctx.timeline.outroProgress;\n  const ease = ctx.utils.bezier(props.curvaEntrada, intro);\n  const opacityMultiplier = (props.globalOpacity ?? 100) / 100;\n\n  const container = ctx.root.getElementById('math-container');\n  const textEl = ctx.root.getElementById('equation-text');\n  const line = ctx.root.getElementById('glow-line');\n\n  if (container && textEl) {\n    container.style.opacity = ctx.utils.lerp(0, 1, ease) * ctx.utils.lerp(1, 0, outro) * opacityMultiplier;\n    container.style.transform = `scale(${ctx.utils.lerp(0.85, 1, ease)})`;\n\n    const windowSize = 40;\n    const startMorph = props.transFrame - (windowSize / 2);\n    const progress = ctx.utils.clamp((frame - startMorph) / windowSize, 0, 1);\n    \n    textEl.innerText = progress < 0.5 ? props.mathStart : props.mathEnd;\n    \n    const distortion = Math.sin(progress * Math.PI);\n    textEl.style.filter = `blur(${distortion * 20}px)`;\n    textEl.style.letterSpacing = `${distortion * 15}px`;\n\n    if (line) {\n      const targetWidth = ctx.utils.lerp(0, 600, ease);\n      line.style.width = `${targetWidth}px`;\n      line.style.opacity = ctx.utils.lerp(1, 0, distortion);\n    }\n  }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-bar-chart",
+      "name": "Dynamic Analytics Bar Chart",
+      "description": "Gráfico de barras dinámico y profesional para reportes de datos. Soporta entrada CSV y animación idle.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:50:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-bar-chart",
+          "name": "Dynamic Analytics Bar Chart",
+          "description": "Gráfico de barras con soporte CSV y animaciones fluidas.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"mainTitle\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Título\", \"defaultValue\": \"REPORTE FINAL\" } -->\n<!-- @dv-prop { \"id\": \"posicion\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición\", \"defaultValue\": \"center center\" } -->\n\n<div id=\"wrapper\">\n    <div id=\"chart-area\">\n        <h1 id=\"title\"></h1>\n        <div id=\"main-layout\">\n            <div id=\"y-axis\">\n                <span class=\"y-label\">100%</span><span class=\"y-label\">75%</span><span class=\"y-label\">50%</span><span class=\"y-label\">25%</span><span class=\"y-label\">0%</span>\n            </div>\n            <div id=\"chart-grid\">\n                <div class=\"grid-line\" style=\"top: 0%\"></div><div class=\"grid-line\" style=\"top: 25%\"></div><div class=\"grid-line\" style=\"top: 50%\"></div><div class=\"grid-line\" style=\"top: 75%\"></div><div class=\"grid-line\" style=\"top: 100%\"></div>\n                <div id=\"bars-container\"></div>\n            </div>\n        </div>\n        <div id=\"x-axis\"></div>\n    </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"barColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Barra\", \"defaultValue\": \"#E44C30\" } */\n/* @dv-prop { \"id\": \"chartWidth\", \"type\": \"number\", \"group\": \"Layout\", \"label\": \"Ancho Gráfico\", \"defaultValue\": 1300 } */\n/* @dv-prop { \"id\": \"chartHeight\", \"type\": \"number\", \"group\": \"Layout\", \"label\": \"Alto Gráfico\", \"defaultValue\": 450 } */\n\n#wrapper { position: absolute; width: 100%; height: 100%; display: grid; place-items: var(--posicion); }\n#chart-area { width: calc(var(--chartWidth) * 1px); background: rgba(10, 10, 10, 0.95); padding: 60px; border-radius: 10px; font-family: 'Inter', sans-serif; color: white; }\n#title { margin-bottom: 40px; text-align: left; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; }\n#main-layout { display: flex; height: calc(var(--chartHeight) * 1px); gap: 25px; }\n#y-axis { display: flex; flex-direction: column; justify-content: space-between; height: 100%; width: 45px; font-size: 12px; opacity: 0.5; text-align: right; }\n#chart-grid { flex: 1; position: relative; border-left: 1px solid rgba(255,255,255,0.2); border-bottom: 1px solid rgba(255,255,255,0.2); }\n.grid-line { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.05); }\n#bars-container { display: flex; align-items: flex-end; justify-content: space-around; width: 100%; height: 100%; padding: 0 20px; }\n.bar-wrapper { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }\n.bar-val { font-size: 14px; margin-bottom: 10px; font-weight: 500; }\n.bar-fill { width: 55%; background: var(--barColor); transform-origin: bottom; }\n#x-axis { margin-left: 70px; display: flex; justify-content: space-around; margin-top: 25px; }\n.x-label { font-size: 12px; opacity: 0.7; width: 0; display: flex; justify-content: center; white-space: nowrap; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"numBars\", \"type\": \"number\", \"group\": \"Datos\", \"label\": \"Cantidad de Barras\", \"defaultValue\": 5 }\n// @dv-prop { \"id\": \"dataCSV\", \"type\": \"string\", \"group\": \"Datos\", \"label\": \"Valores (%)\", \"defaultValue\": \"75,90,55,85,40\" }\n// @dv-prop { \"id\": \"namesCSV\", \"type\": \"string\", \"group\": \"Datos\", \"label\": \"Nombres\", \"defaultValue\": \"A,B,C,D,E\" }\n// @dv-prop { \"id\": \"enableIdle\", \"type\": \"boolean\", \"group\": \"Animación\", \"label\": \"Idle (Movimiento)\", \"defaultValue\": true }\n// @dv-prop { \"id\": \"curva\", \"type\": \"easing\", \"group\": \"Animación\", \"label\": \"Curva Entrada\", \"defaultValue\": \"[0.2, 0, 0.1, 1]\" }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n    const intro = ctx.timeline.introProgress;\n    const outro = ctx.timeline.outroProgress;\n    const easeMain = ctx.utils.bezier(props.curva, intro);\n    const bContainer = ctx.root.getElementById('bars-container');\n    const xContainer = ctx.root.getElementById('x-axis');\n    const title = ctx.root.getElementById('title');\n\n    if (title) title.innerText = props.mainTitle;\n    const values = props.dataCSV.split(',').map(v => parseFloat(v.trim()) || 0);\n    const names = props.namesCSV.split(',').map(n => n.trim());\n\n    if (bContainer && bContainer.children.length !== parseInt(props.numBars)) {\n        bContainer.innerHTML = ''; xContainer.innerHTML = '';\n        for (let i = 0; i < props.numBars; i++) {\n            bContainer.innerHTML += `<div class=\"bar-wrapper\"><span id=\"v-txt-${i}\" class=\"bar-val\"></span><div id=\"v-bar-${i}\" class=\"bar-fill\"></div></div>`;\n            xContainer.innerHTML += `<div class=\"x-label\"><span>${names[i] || ''}</span></div>`;\n        }\n    }\n\n    for (let i = 0; i < props.numBars; i++) {\n        const bar = ctx.root.getElementById(`v-bar-${i}`);\n        const txt = ctx.root.getElementById(`v-txt-${i}`);\n        const delay = i * 0.05;\n        const bEase = ctx.utils.bezier(props.curva, ctx.utils.clamp((intro - delay) / 0.7, 0, 1));\n        const idle = props.enableIdle ? (Math.sin((frame * 0.05) + i) * 1.5) : 0;\n        const currentVal = (ctx.utils.lerp(0, values[i] || 0, bEase) + (idle * bEase)) * (1 - outro);\n\n        if (bar) bar.style.height = `${currentVal}%`;\n        if (txt) txt.innerText = Math.round(currentVal) + '%';\n    }\n\n    const main = ctx.root.getElementById('chart-area');\n    if (main) {\n        main.style.opacity = easeMain * (1 - outro);\n        main.style.transform = `translateY(${ctx.utils.lerp(20, 0, easeMain)}px)`;\n    }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-donut-chart",
+      "name": "Donut Analytics Master",
+      "description": "Gráfico circular interactivo con desglose de datos lateral y animaciones fluidas.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:55:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-donut-chart",
+          "name": "Donut Analytics Master",
+          "description": "Visualización de porcentajes en formato donut con lista de detalles.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"title\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Título\", \"defaultValue\": \"DATOS DE VENTAS\" } -->\n\n<div id=\"wrapper\">\n    <div id=\"container\">\n        <div class=\"box\">\n            <h1 id=\"main-title\"></h1>\n            <div class=\"donut-wrap\">\n                <svg viewBox=\"0 0 100 100\">\n                    <circle cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke=\"#222\" stroke-width=\"10\" />\n                    <g id=\"donut-group\">\n                        <circle id=\"s1\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke-width=\"10\" stroke-dasharray=\"0 251\" />\n                        <circle id=\"s2\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke-width=\"10\" stroke-dasharray=\"0 251\" />\n                        <circle id=\"s3\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke-width=\"10\" stroke-dasharray=\"0 251\" />\n                        <circle id=\"s4\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke-width=\"10\" stroke-dasharray=\"0 251\" />\n                        <circle id=\"s5\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"transparent\" stroke-width=\"10\" stroke-dasharray=\"0 251\" />\n                    </g>\n                </svg>\n                <div id=\"center-val\">0%</div>\n            </div>\n        </div>\n        <div class=\"box info-list\">\n            <h3 style=\"opacity:0.5; font-size:12px; letter-spacing:2px\">DETALLES</h3>\n            <div class=\"row\"><div id=\"d1\" class=\"dot\"></div> <span id=\"n1\"></span> <b id=\"v1\"></b></div>\n            <div class=\"row\"><div id=\"d2\" class=\"dot\"></div> <span id=\"n2\"></span> <b id=\"v2\"></b></div>\n            <div class=\"row\"><div id=\"d3\" class=\"dot\"></div> <span id=\"n3\"></span> <b id=\"v3\"></b></div>\n            <div class=\"row\"><div id=\"d4\" class=\"dot\"></div> <span id=\"n4\"></span> <b id=\"v4\"></b></div>\n            <div class=\"row\"><div id=\"d5\" class=\"dot\"></div> <span id=\"n5\"></span> <b id=\"v5\"></b></div>\n        </div>\n    </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* Estilos de Layout */\n#wrapper { position: absolute; width: 100%; height: 100%; display: grid; place-items: center; background: transparent; color: #fff; font-family: 'Inter', sans-serif; }\n#container { width: 900px; display: flex; gap: 50px; background: rgba(17,17,17,0.95); padding: 50px; border-radius: 20px; border: 1px solid #333; backdrop-filter: blur(10px); }\n.box { flex: 1; display: flex; flex-direction: column; align-items: center; }\n.donut-wrap { position: relative; width: 300px; height: 300px; margin-top: 20px; }\nsvg { transform: rotate(-90deg); }\n#center-val { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; font-weight: bold; }\n.info-list { align-items: stretch; justify-content: center; gap: 15px; }\n.row { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; font-size: 14px; }\n.dot { width: 10px; height: 10px; border-radius: 50%; }\n.row b { margin-left: auto; font-family: monospace; font-size: 18px; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"data\", \"type\": \"string\", \"group\": \"Datos\", \"label\": \"Valores (%)\", \"defaultValue\": \"40,30,15,10,5\" }\n// @dv-prop { \"id\": \"names\", \"type\": \"string\", \"group\": \"Datos\", \"label\": \"Nombres\", \"defaultValue\": \"Ventas,Marketing,Web,Social,Otros\" }\n// @dv-prop { \"id\": \"c1\", \"type\": \"color\", \"group\": \"Colores\", \"label\": \"Color 1\", \"defaultValue\": \"#00f2ff\" }\n// @dv-prop { \"id\": \"c2\", \"type\": \"color\", \"group\": \"Colores\", \"label\": \"Color 2\", \"defaultValue\": \"#7000ff\" }\n// @dv-prop { \"id\": \"c3\", \"type\": \"color\", \"group\": \"Colores\", \"label\": \"Color 3\", \"defaultValue\": \"#ff007a\" }\n// @dv-prop { \"id\": \"c4\", \"type\": \"color\", \"group\": \"Colores\", \"label\": \"Color 4\", \"defaultValue\": \"#ffb800\" }\n// @dv-prop { \"id\": \"c5\", \"type\": \"color\", \"group\": \"Colores\", \"label\": \"Color 5\", \"defaultValue\": \"#00ff85\" }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n    const intro = ctx.timeline.introProgress;\n    const ease = ctx.utils.bezier([0.2, 0, 0, 1], intro);\n    ctx.root.getElementById('main-title').innerText = props.title;\n    const vals = props.data.split(',').map(v => parseFloat(v) || 0);\n    const names = props.names.split(',').map(n => n.trim());\n    const circ = 251.32;\n    let acc = 0; let totalAnim = 0;\n\n    for (let i = 0; i < 5; i++) {\n        const color = props[`c${i+1}`];\n        const val = vals[i] || 0;\n        const name = names[i] || \"---\";\n        const seg = ctx.root.getElementById(`s${i+1}`);\n        if (seg) {\n            const draw = (val / 100) * circ * ease;\n            seg.setAttribute('stroke', color);\n            seg.setAttribute('stroke-dasharray', `${draw} ${circ}`);\n            seg.setAttribute('stroke-dashoffset', -(acc / 100) * circ);\n        }\n        ctx.root.getElementById(`d${i+1}`).style.background = color;\n        ctx.root.getElementById(`n${i+1}`).innerText = name;\n        ctx.root.getElementById(`v${i+1}`).innerText = val + \"%\";\n        acc += val; totalAnim += val * ease;\n    }\n    ctx.root.getElementById('center-val').innerText = Math.round(totalAnim) + \"%\";\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-finance-widget",
+      "name": "Finance Monitor Widget",
+      "description": "Widget financiero profesional con sparkline dinámico y monitoreo de activos en tiempo real.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-04-30T23:59:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-finance-widget",
+          "name": "Finance Monitor Widget",
+          "description": "Widget de trading con gráfica sparkline animada.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"tickerName\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Nombre Activo\", \"defaultValue\": \"BTC/USDT\" } -->\n<!-- @dv-prop { \"id\": \"priceValue\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Precio Actual\", \"defaultValue\": \"$64,230.50\" } -->\n<!-- @dv-prop { \"id\": \"posicion\", \"type\": \"alignment\", \"group\": \"Layout\", \"label\": \"Posición Widget\", \"defaultValue\": \"bottom right\" } -->\n\n<div id=\"scene-wrapper\">\n  <div id=\"monitor-card\">\n    <div id=\"header\">\n      <span id=\"ticker-label\"></span>\n      <div id=\"status-dot\"></div>\n    </div>\n    <div id=\"price-container\">\n      <h1 id=\"main-price\"></h1>\n    </div>\n    <div id=\"chart-container\">\n      <svg id=\"sparkline\" viewBox=\"0 0 300 100\" preserveAspectRatio=\"none\">\n        <path id=\"chart-path\" fill=\"none\" stroke-width=\"3\" stroke-linecap=\"round\" />\n      </svg>\n    </div>\n  </div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"cardWidth\", \"type\": \"number\", \"group\": \"Dimensiones\", \"label\": \"Ancho Panel\", \"defaultValue\": 350 } */\n/* @dv-prop { \"id\": \"accentColor\", \"type\": \"color\", \"group\": \"Apariencia\", \"label\": \"Color Tendencia\", \"defaultValue\": \"#00ff88\" } */\n/* @dv-prop { \"id\": \"panelColor\", \"type\": \"color\", \"group\": \"Apariencia\", \"label\": \"Fondo Panel\", \"defaultValue\": \"#121212EE\" } */\n\n#scene-wrapper { position: absolute; width: 100%; height: 100%; display: grid; place-items: var(--posicion); padding: 60px; box-sizing: border-box; }\n#monitor-card { width: calc(var(--cardWidth) * 1px); background: var(--panelColor); border-left: 4px solid var(--accentColor); padding: 20px; font-family: 'Inter', sans-serif; color: white; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 4px; }\n#header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }\n#ticker-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }\n#status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accentColor); }\n#main-price { font-size: 32px; margin: 0; font-variant-numeric: tabular-nums; font-weight: 800; }\n#chart-container { width: 100%; height: 60px; margin-top: 15px; }\n#sparkline { width: 100%; height: 100%; }\n#chart-path { stroke: var(--accentColor); filter: drop-shadow(0 0 5px var(--accentColor)); }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"volatilidad\", \"type\": \"number\", \"group\": \"Animación\", \"label\": \"Ruido Visual\", \"defaultValue\": 5 }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const intro = ctx.timeline.introProgress;\n  const outro = ctx.timeline.outroProgress;\n  const ease = ctx.utils.easeOutQuart(intro);\n  const opacityMultiplier = (props.globalOpacity ?? 100) / 100;\n  const card = ctx.root.getElementById('monitor-card');\n  if (card) {\n    card.style.opacity = ease * (1 - outro) * opacityMultiplier;\n    card.style.transform = `translateX(${ctx.utils.lerp(50, 0, ease)}px)`;\n  }\n  const tickerEl = ctx.root.getElementById('ticker-label');\n  if (tickerEl) tickerEl.innerText = props.tickerName;\n  const priceEl = ctx.root.getElementById('main-price');\n  if (priceEl) priceEl.innerText = props.priceValue;\n  const path = ctx.root.getElementById('chart-path');\n  if (path) {\n    const points = 20; const width = 300; const height = 100; let d = '';\n    for (let i = 0; i <= points; i++) {\n      const x = (i / points) * width;\n      const seed = Math.sin(i * 0.5 + frame * 0.05) * props.volatilidad;\n      const baseY = 50 + seed;\n      const progressLimit = i / points;\n      const pointEase = ctx.utils.clamp(ctx.utils.mapRange(ease, progressLimit, progressLimit + 0.2, 0, 1), 0, 1);\n      const y = ctx.utils.lerp(height, baseY, pointEase);\n      if (i === 0) d += `M ${x} ${y}`; else d += ` L ${x} ${y}`;\n    }\n    path.setAttribute('d', d);\n    path.style.opacity = ctx.utils.lerp(0, 1, ease);\n  }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
+      }
+    },
+    {
+      "id": "template-hero-horizons",
+      "name": "Horizons Cinematic Hero",
+      "description": "Apertura cinematográfica premium con gradientes dinámicos y tipografía broadcast elegante.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-05-01T00:05:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "template-hero-horizons",
+          "name": "Horizons Cinematic Hero",
+          "description": "Hero section cinemático con atmósfera premium.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "masterRules",
+              "type": "prompt",
+              "label": "Contexto para IA",
+              "defaultValue": "MASTER_PROMPT"
+            },
+            {
+              "id": "htmlCode",
+              "type": "code",
+              "label": "Estructura HTML",
+              "defaultValue": "<!-- @dv-prop { \"id\": \"mainHeadline\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Titular\", \"defaultValue\": \"HORIZONS\" } -->\n<!-- @dv-prop { \"id\": \"subHeadline\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Subtítulo\", \"defaultValue\": \"Lleva tu visión al límite\" } -->\n\n<div id=\"viewport\">\n  <div id=\"bg-mesh\"></div>\n  <div id=\"main-content\">\n    <div class=\"visual-accent\">\n      <div id=\"orb-glow\"></div>\n      <div class=\"product-wrap\">\n        <div id=\"product-core\"></div>\n      </div>\n    </div>\n    <div id=\"text-stack\">\n      <h1 id=\"hero-text\"></h1>\n      <div id=\"line-separator\"></div>\n      <p id=\"sub-text\"></p>\n    </div>\n  </div>\n  <div id=\"overlay-vignette\"></div>\n</div>"
+            },
+            {
+              "id": "cssCode",
+              "type": "code",
+              "label": "Estilos CSS",
+              "defaultValue": "/* @dv-prop { \"id\": \"accentColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color de Acento\", \"defaultValue\": \"#673AB7\" } */\n/* @dv-prop { \"id\": \"baseColor\", \"type\": \"color\", \"group\": \"Estilo\", \"label\": \"Color Base\", \"defaultValue\": \"#050505\" } */\n\n#viewport { position: absolute; width: 1920px; height: 1080px; background: var(--baseColor); overflow: hidden; display: flex; justify-content: center; align-items: center; color: #ffffff; font-family: 'Inter', sans-serif; }\n#bg-mesh { position: absolute; width: 150%; height: 150%; background: radial-gradient(circle at center, var(--accentColor) 0%, transparent 70%); filter: blur(80px); opacity: 0.15; }\n#main-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }\n.visual-accent { position: relative; margin-bottom: 60px; }\n#orb-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: var(--accentColor); border-radius: 50%; filter: blur(100px); }\n.product-wrap { width: 240px; height: 240px; border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); display: grid; place-items: center; }\n#product-core { width: 80px; height: 80px; background: white; border-radius: 50%; box-shadow: 0 0 40px var(--accentColor); }\n#text-stack { text-align: center; }\n#hero-text { font-size: 110px; font-weight: 900; letter-spacing: 15px; margin: 0; text-transform: uppercase; }\n#line-separator { width: 0px; height: 2px; background: white; margin: 20px auto; }\n#sub-text { font-size: 24px; font-weight: 300; letter-spacing: 4px; opacity: 0.7; text-transform: uppercase; }\n#overlay-vignette { position: absolute; width: 100%; height: 100%; box-shadow: inset 0 0 300px #000; pointer-events: none; }"
+            },
+            {
+              "id": "jsCode",
+              "type": "code",
+              "label": "Lógica JS",
+              "defaultValue": "// @dv-prop { \"id\": \"globalOpacity\", \"type\": \"slider\", \"group\": \"Apariencia\", \"label\": \"Opacidad Global\", \"defaultValue\": 100 }\n// @dv-prop { \"id\": \"motionCurve\", \"type\": \"easing\", \"group\": \"Animación\", \"label\": \"Curva Cinematográfica\", \"defaultValue\": \"[0.2, 0, 0, 1]\" }\n// @dv-prop { \"id\": \"rotationSpeed\", \"type\": \"number\", \"group\": \"Animación\", \"label\": \"Velocidad Órbita\", \"defaultValue\": 0.2 }\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const intro = ctx.timeline.introProgress;\n  const outro = ctx.timeline.outroProgress;\n  const ease = ctx.utils.bezier(props.motionCurve, intro);\n  const opacityMultiplier = (props.globalOpacity ?? 100) / 100;\n\n  const orb = ctx.root.getElementById('orb-glow');\n  const product = ctx.root.getElementById('product-core');\n  const heroText = ctx.root.getElementById('hero-text');\n  const line = ctx.root.getElementById('line-separator');\n  const subText = ctx.root.getElementById('sub-text');\n  const bg = ctx.root.getElementById('bg-mesh');\n\n  if (bg) {\n    const pulse = Math.sin(frame * 0.02) * 0.05;\n    bg.style.opacity = (0.1 + pulse) * (1 - outro) * opacityMultiplier;\n    bg.style.transform = `scale(${ctx.utils.lerp(1.2, 1, ease)}) rotate(${frame * 0.05}deg)`;\n  }\n\n  if (orb && product) {\n    const float = Math.sin(frame * 0.03) * 20;\n    const s = ctx.utils.lerp(0.5, 1, ease) * ctx.utils.lerp(1, 0.8, outro);\n    orb.style.opacity = ctx.utils.lerp(0, 0.6, ease) * (1 - outro) * opacityMultiplier;\n    product.parentElement.style.transform = `translateY(${float}px) scale(${s})`;\n    product.parentElement.style.opacity = ease * (1 - outro) * opacityMultiplier;\n    product.parentElement.style.rotate = `${frame * props.rotationSpeed}deg`;\n  }\n\n  if (heroText) {\n    heroText.innerText = props.mainHeadline;\n    heroText.style.letterSpacing = `${ctx.utils.lerp(40, 15, ease)}px`;\n    heroText.style.opacity = ease * (1 - outro) * opacityMultiplier;\n    heroText.style.filter = `blur(${ctx.utils.lerp(20, 0, ease)}px)`;\n  }\n\n  if (line) {\n    line.style.width = `${ctx.utils.lerp(0, 400, ease)}px`;\n    line.style.opacity = ease * (1 - outro) * opacityMultiplier;\n  }\n\n  if (subText) {\n    subText.innerText = props.subHeadline;\n    subText.style.transform = `translateY(${ctx.utils.lerp(20, 0, ease)}px)`;\n    subText.style.opacity = ctx.utils.clamp(ctx.utils.mapRange(intro, 0.5, 1, 0, 0.7), 0, 0.7) * (1 - outro) * opacityMultiplier;\n  }\n};"
+            }
+          ]
+        },
+        "html": "<div id=\"dv-master-host\"><style id=\"dv-master-styles\"></style><div id=\"dv-master-canvas\" style=\"width: 1920px; height: 1080px; position: relative; overflow: hidden;\"></div></div>",
+        "css": "#dv-master-host { width: 100%; height: 100%; background: transparent; will-change: transform; contain: paint; } #dv-master-canvas { transform-origin: top left; }",
+        "js": "dvEngine.register({ awake: (ctx) => { ctx.state.lastHtml = null; ctx.state.lastCss = null; ctx.state.lastJs = null; ctx.state.injectedFn = null; ctx.state.childCtx = null; ctx.refs.canvas = ctx.root.getElementById('dv-master-canvas'); ctx.refs.styleTag = ctx.root.getElementById('dv-master-styles'); }, update: (ctx) => { const { props, refs, state, frame } = ctx; if (!refs.canvas || !refs.styleTag) return; if (state.lastHtml !== props.htmlCode) { refs.canvas.innerHTML = props.htmlCode || ''; state.lastHtml = props.htmlCode; state.injectedFn = null; state.lastJs = null; } if (state.lastCss !== props.cssCode) { refs.styleTag.textContent = props.cssCode || ''; state.lastCss = props.cssCode; } const currentJs = (props.jsCode || '').trim(); if (currentJs && state.lastJs !== currentJs) { state.lastJs = currentJs; try { const sandbox = { renderDVGE: null }; const sandboxCode = `(function(sandbox, ctx) { \"use strict\"; const window = { renderDVGE: null }; ${currentJs} \\n sandbox.renderDVGE = window.renderDVGE; })(arguments[0], arguments[1])`; const fn = new Function(sandboxCode); fn(sandbox, ctx); if (sandbox.renderDVGE) { state.injectedFn = sandbox.renderDVGE; state.childCtx = { ...ctx, state: {}, refs: {}, parent: ctx }; } } catch (e) { console.error('[Studio Master] JS Error:', e.message); } } if (state.injectedFn) { try { state.childCtx.frame = frame; state.childCtx.props = props; state.childCtx.timeline = ctx.timeline; state.injectedFn(frame, props, state.childCtx); } catch (e) {} } } });"
       }
     }
   ]
