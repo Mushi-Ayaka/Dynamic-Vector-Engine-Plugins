@@ -502,6 +502,109 @@
       }
     },
     {
+      "id": "ember-motion-studio-showcase",
+      "name": "Ember Motion Studio Showcase",
+      "description": "Plantilla oficial de demostración de marca para Ember Motion Studio.",
+      "version": "1.0.0",
+      "author": "Jonatan Barón",
+      "updatedAt": "2026-05-01T07:38:00.000Z",
+      "files": {
+        "manifest": {
+          "id": "ember-motion-studio-showcase",
+          "name": "Ember Motion Studio Showcase",
+          "description": "Plantilla de marca con logo animado y glow dinámico.",
+          "version": "1.0.0",
+          "author": "Jonatan Barón",
+          "presets": [
+            "branding",
+            "motion"
+          ],
+          "schema": [
+            {
+              "id": "titleText",
+              "type": "string",
+              "group": "Contenido",
+              "label": "Título",
+              "defaultValue": "Ember"
+            },
+            {
+              "id": "subtitleText",
+              "type": "string",
+              "group": "Contenido",
+              "label": "Subtítulo",
+              "defaultValue": "Motion Studio"
+            },
+            {
+              "id": "transparentBg",
+              "type": "boolean",
+              "group": "Layout",
+              "label": "Fondo Transparente",
+              "defaultValue": false
+            },
+            {
+              "id": "emberColor",
+              "type": "color",
+              "group": "Marca",
+              "label": "Color Ember",
+              "defaultValue": "#E44C30"
+            },
+            {
+              "id": "logoSize",
+              "type": "number",
+              "group": "Layout",
+              "label": "Tamaño del Logo",
+              "defaultValue": 140
+            },
+            {
+              "id": "logoGap",
+              "type": "number",
+              "group": "Layout",
+              "label": "Separación Logo-Título",
+              "defaultValue": 28
+            },
+            {
+              "id": "titleSize",
+              "type": "number",
+              "group": "Tipografía",
+              "label": "Tamaño Título",
+              "defaultValue": 52
+            },
+            {
+              "id": "subtitleSize",
+              "type": "number",
+              "group": "Tipografía",
+              "label": "Tamaño Sub",
+              "defaultValue": 15
+            },
+            {
+              "id": "titleWeight",
+              "type": "number",
+              "group": "Tipografía",
+              "label": "Grosor Título",
+              "defaultValue": 900
+            },
+            {
+              "id": "subtitleWeight",
+              "type": "number",
+              "group": "Tipografía",
+              "label": "Grosor Sub",
+              "defaultValue": 500
+            },
+            {
+              "id": "tracking",
+              "type": "number",
+              "group": "Tipografía",
+              "label": "Tracking Sub",
+              "defaultValue": 35
+            }
+          ]
+        },
+        "html": "<!-- @dv-prop { \"id\": \"titleText\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Título\", \"defaultValue\": \"Ember\" } -->\n<!-- @dv-prop { \"id\": \"subtitleText\", \"type\": \"string\", \"group\": \"Contenido\", \"label\": \"Subtítulo\", \"defaultValue\": \"Motion Studio\" } -->\n\n<div id=\"scene-wrapper\">\n  <div class=\"brand-container\" id=\"logoContainer\">\n    <svg class=\"ember-mark\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"emberGrad\" x1=\"0%\" y1=\"100%\" x2=\"100%\" y2=\"0%\">\n          <stop offset=\"0%\" stop-color=\"#801C0B\" />\n          <stop offset=\"50%\" stop-color=\"var(--emberColor)\" />\n          <stop offset=\"100%\" stop-color=\"#FFAB99\" />\n        </linearGradient>\n      </defs>\n      \n      <polygon class=\"mark-trail t1\" points=\"20,40 30,50 20,60 10,50\" stroke=\"var(--emberColor)\" stroke-width=\"2.5\" opacity=\"0.3\" />\n      <polygon class=\"mark-trail t2\" points=\"45,36 59,50 45,64 31,50\" stroke=\"var(--emberColor)\" stroke-width=\"4\" opacity=\"0.6\" />\n      <polygon class=\"mark-core\" points=\"75,30 95,50 75,70 55,50\" />\n    </svg>\n\n    <div class=\"wordmark\">\n      <div class=\"brand-title\" id=\"d-title\"></div>\n      <div class=\"brand-subtitle\" id=\"d-subtitle\"></div>\n    </div>\n  </div>\n</div>",
+        "css": "/* @dv-prop { \"id\": \"transparentBg\", \"type\": \"boolean\", \"group\": \"Layout\", \"label\": \"Fondo Transparente\", \"defaultValue\": false } */\n/* @dv-prop { \"id\": \"emberColor\", \"type\": \"color\", \"group\": \"Marca\", \"label\": \"Color Ember\", \"defaultValue\": \"#E44C30\" } */\n/* @dv-prop { \"id\": \"logoSize\", \"type\": \"number\", \"group\": \"Layout\", \"label\": \"Tamaño del Logo\", \"defaultValue\": 140 } */\n/* @dv-prop { \"id\": \"logoGap\", \"type\": \"number\", \"group\": \"Layout\", \"label\": \"Separación Logo-Título\", \"defaultValue\": 28 } */\n/* @dv-prop { \"id\": \"titleSize\", \"type\": \"number\", \"group\": \"Tipografía\", \"label\": \"Tamaño Título\", \"defaultValue\": 52 } */\n/* @dv-prop { \"id\": \"subtitleSize\", \"type\": \"number\", \"group\": \"Tipografía\", \"label\": \"Tamaño Sub\", \"defaultValue\": 15 } */\n/* @dv-prop { \"id\": \"titleWeight\", \"type\": \"number\", \"group\": \"Tipografía\", \"label\": \"Grosor Título\", \"defaultValue\": 900 } */\n/* @dv-prop { \"id\": \"subtitleWeight\", \"type\": \"number\", \"group\": \"Tipografía\", \"label\": \"Grosor Sub\", \"defaultValue\": 500 } */\n/* @dv-prop { \"id\": \"tracking\", \"type\": \"number\", \"group\": \"Tipografía\", \"label\": \"Tracking Sub\", \"defaultValue\": 35 } */\n\nhtml, body, #dv-render-root, #plugin-root, #dv-master-canvas {\n  background-color: transparent !important;\n}\n\n#dv-master-canvas {\n  width: 100% !important;\n  height: 100% !important;\n}\n\n#scene-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  font-family: Outfit, Montserrat, sans-serif; \n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-rendering: optimizeLegibility;\n  background-color: transparent; \n}\n\n.brand-container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: calc(var(--logoGap) * 1px);\n  transform: translateZ(0); \n}\n\n.ember-mark {\n  width: calc(var(--logoSize) * 1px);\n  height: calc(var(--logoSize) * 1px);\n}\n\n.mark-core { fill: url(#emberGrad); }\n.mark-trail { fill: none; stroke-linejoin: miter; }\n\n.wordmark {\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  gap: 4px;\n}\n\n.brand-title {\n  font-size: calc(var(--titleSize) * 1px);\n  font-weight: var(--titleWeight);\n  letter-spacing: -0.03em;\n  color: #F5F5F5;\n  line-height: 1;\n  text-transform: uppercase;\n}\n\n.brand-subtitle {\n  font-size: calc(var(--subtitleSize) * 1px);\n  font-weight: var(--subtitleWeight);\n  letter-spacing: calc(var(--tracking) * 0.01em);\n  color: #888888;\n  text-transform: uppercase;\n  margin-left: calc(var(--tracking) * 0.01em);\n}",
+        "js": "if (!document.getElementById('dv-font-outfit')) {\n  const fontLink = document.createElement('link');\n  fontLink.id = 'dv-font-outfit';\n  fontLink.rel = 'stylesheet';\n  fontLink.href = 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800;900&display=swap';\n  document.head.appendChild(fontLink);\n}\n\nwindow.renderDVGE = (frame, props, ctx) => {\n  const host = ctx.root.getElementById('dv-master-host');\n  const svg = ctx.root.querySelector('.ember-mark');\n  const wordmark = ctx.root.querySelector('.wordmark');\n  const titleEl = ctx.root.getElementById('d-title');\n  const subtitleEl = ctx.root.getElementById('d-subtitle');\n  \n  if (!svg || !wordmark || !titleEl || !subtitleEl) return;\n\n  const wrapper = ctx.root.getElementById('scene-wrapper');\n  if (wrapper) {\n    wrapper.style.backgroundColor = props.transparentBg ? 'transparent' : '#050505';\n  }\n\n  titleEl.innerText = props.titleText || 'Ember';\n  subtitleEl.innerText = props.subtitleText || 'Motion Studio';\n\n  const intro = ctx.utils.clamp(ctx.timeline.introProgress, 0, 1);\n  const easeIntro = ctx.utils.easeOutQuart(intro);\n  \n  svg.style.opacity = intro.toString();\n  svg.style.transform = `translateY(${ctx.utils.lerp(20, 0, easeIntro)}px)`;\n  \n  const delayIntro = ctx.utils.clamp((ctx.timeline.introProgress - 0.2) / 0.8, 0, 1);\n  const easeDelay = ctx.utils.easeOutQuart(delayIntro);\n  \n  wordmark.style.opacity = delayIntro.toString();\n  wordmark.style.transform = `translateY(${ctx.utils.lerp(20, 0, easeDelay)}px)`;\n  \n  const pulse = Math.sin(frame * 0.05); \n  const normalizedPulse = (pulse + 1) / 2;\n  \n  const glow = ctx.utils.lerp(15, 40, normalizedPulse);\n  const yOffsetFloat = ctx.utils.lerp(0, -5, normalizedPulse);\n  \n  const hexColor = props.emberColor || '#E44C30';\n  svg.style.filter = `drop-shadow(0 0 ${glow}px ${hexColor}66)`;\n  svg.style.transform += ` translateY(${yOffsetFloat}px)`;\n};"
+      }
+    },
+    {
       "id": "template-finance-widget",
       "name": "Finance Monitor Widget",
       "description": "Widget financiero profesional con sparkline dinámico y monitoreo de activos en tiempo real.",
