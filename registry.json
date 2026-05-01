@@ -3,7 +3,7 @@
     {
       "id": "dv-studio-master",
       "name": "DVGE Studio Master",
-      "description": "El lienzo definitivo para desarrolladores. Renderiza HTML, CSS y JS puro con sincronización total de frames y soporte para IA.",
+      "description": "Un sencillo ejemplo.",
       "version": "5.8.0",
       "author": "Jonatan Barón",
       "updatedAt": "2026-04-30T09:00:00.000Z",
